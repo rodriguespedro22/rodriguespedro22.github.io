@@ -198,8 +198,28 @@
     requestAnimationFrame(andar);
   }
 
-  // Relógio de Charqueadas na barra.
-  var relogio = document.getElementById('relogio');
+  // Vídeos das telas: tocam só quando aparecem; o botão pausa e retoma. Com "reduzir movimento", ficam parados no pôster.
+  document.querySelectorAll('.vid').forEach(function (fig) {
+    var v = fig.querySelector('video'), btn = fig.querySelector('.vid-btn');
+    if (!v || !btn) return;
+    var pausadoPeloUsuario = reduce.matches;
+    var rotulo = function () { btn.textContent = v.paused ? 'Reproduzir' : 'Pausar'; };
+    v.addEventListener('play', rotulo); v.addEventListener('pause', rotulo);
+    btn.addEventListener('click', function () {
+      if (v.paused) { pausadoPeloUsuario = false; v.play(); } else { pausadoPeloUsuario = true; v.pause(); }
+    });
+    rotulo();
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          if (e.isIntersecting && !pausadoPeloUsuario) { v.preload = 'auto'; v.play().catch(function () {}); }
+          else if (!e.isIntersecting) v.pause();
+        });
+      }, { threshold: 0.35 }).observe(fig);
+    }
+  });
+
+  // Relógio de Charqueadas na barra.  var relogio = document.getElementById('relogio');
   if (relogio && window.Intl) {
     var hora = new Intl.DateTimeFormat('pt-BR', { timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit' });
     var tic = function () { relogio.textContent = 'Charqueadas, ' + hora.format(new Date()); };
@@ -232,18 +252,6 @@
   }
 
   if (!reduce.matches && mouseFino) {
-    // Lanterna: o cursor acende a sala escura do topo.
-    var heroEl = document.querySelector('.hero');
-    if (heroEl) {
-      root.classList.add('lanterna');
-      heroEl.addEventListener('pointermove', function (e) {
-        var r = heroEl.getBoundingClientRect();
-        heroEl.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-        heroEl.style.setProperty('--my', (e.clientY - r.top) + 'px');
-      });
-      heroEl.addEventListener('pointerleave', function () { heroEl.style.setProperty('--mx', '-999px'); });
-    }
-
     // Luz que acompanha o cursor nas faixas escuras.
     document.querySelectorAll('.f-ink, .back').forEach(function (el) {
       el.addEventListener('pointermove', function (e) {
@@ -322,7 +330,7 @@
 
     // 1. Rasgar o cupom: o canhoto se solta pela linha picotada, o cupom sai e a sala acende.
     var rasgo = gsap.timeline({
-      scrollTrigger: { trigger: '.hero', start: 'top top', end: desktop ? '+=120%' : '+=80%', scrub: 0.8, pin: true, anticipatePin: 1 }
+      scrollTrigger: { trigger: '.hero', start: 'top top', end: desktop ? '+=120%' : '+=80%', scrub: 0.8, pin: true, anticipatePin: 1, onUpdate: function (s) { window.__heroP = s.progress; } }
     });
     rasgo
       .to('.ticket-stub', desktop

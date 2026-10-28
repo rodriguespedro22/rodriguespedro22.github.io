@@ -17,8 +17,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=13">
+<link rel="stylesheet" href="style.css?v=16">
 <script>document.documentElement.classList.add('js')</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Pedro Rodrigues da Cunha","jobTitle":"Desenvolvedor full stack","email":"mailto:pedro.dacunha02@gmail.com","address":{"@type":"PostalAddress","addressLocality":"Charqueadas","addressRegion":"RS","addressCountry":"BR"},"sameAs":["https://www.linkedin.com/in/pedrorodrigues2","https://github.com/rodriguespedro22"]}</script>
 </head>
@@ -236,10 +237,14 @@ using (regional = any (regionais_do_usuario()));</code></pre>
               <a class="tlink" href="https://github.com/rodriguespedro22/30-pra-show" rel="noopener">Código no GitHub</a>
             </p>
           </div>
-          <div class="pair" data-rise data-tilt>
-            <img src="img/show-home.jpg" width="1600" height="1000" alt="Página inicial do 30 pra Show com o título Seu próximo show começa aqui e cartazes de shows fictícios" loading="lazy">
-            <img src="img/show-detalhe.jpg" width="1600" height="1000" alt="Página de um show fictício, Maré Alta, com data, local e escolha de setor com preços" loading="lazy">
-          </div>
+          <figure class="vid" data-rise>
+            <div class="vid-frame" data-ui data-tilt>
+              <p class="vid-url" aria-hidden="true">rodriguespedro22.github.io/30-pra-show</p>
+              <video src="video/show.webm" poster="video/show.jpg" width="960" height="600" muted loop playsinline preload="none" aria-label="Gravação de tela da página inicial do 30 pra Show sendo rolada, com cartazes de shows fictícios"></video>
+              <button class="vid-btn" type="button">Pausar</button>
+            </div>
+            <figcaption>Gravação do site no ar, com artistas fictícios.</figcaption>
+          </figure>
         </div>
       </div>
     </article>
@@ -300,12 +305,19 @@ using (regional = any (regionais_do_usuario()));</code></pre>
         <div class="folder-in">
           <div class="folder-text" data-rise>
             <p class="lead">App de treino diário para jogadores de League of Legends, em português, com lições curtas e dados de campeões.</p>
-            <p>Projeto pessoal em desenvolvimento, em repositório privado. As lições e os dados ficam no Postgres, então o conteúdo muda sem novo deploy. Projeto de fã, não endossado pela Riot Games.</p>
-          </div>
-          <div class="folder-side" data-rise>
+            <p>Projeto pessoal em desenvolvimento e já no ar; o código fica em repositório privado. As lições e os dados ficam no Postgres, então o conteúdo muda sem novo deploy. Login, progresso sincronizado entre aparelhos e testes de ponta a ponta já funcionam.</p>
+            <p>Projeto de fã, não endossado pela Riot Games.</p>
             <p class="stack"><b>Stack:</b> Next.js, React, TypeScript, Tailwind CSS, Supabase, Vitest e Playwright.</p>
-            <p>Login, progresso sincronizado entre aparelhos e testes de ponta a ponta já funcionam.</p>
+            <p class="actions"><a class="btn" href="https://olhaomapa.vercel.app/apresentacao" rel="noopener">Ver no ar</a></p>
           </div>
+          <figure class="vid" data-rise>
+            <div class="vid-frame" data-ui data-tilt>
+              <p class="vid-url" aria-hidden="true">olhaomapa.vercel.app/apresentacao</p>
+              <video src="video/mapa.webm" poster="video/mapa.jpg" width="960" height="600" muted loop playsinline preload="none" aria-label="Gravação de tela da página de apresentação do Olha o Mapa!, com uma questão de treino e a tela do treino do dia"></video>
+              <button class="vid-btn" type="button">Pausar</button>
+            </div>
+            <figcaption>Gravação da página de apresentação, no ar.</figcaption>
+          </figure>
         </div>
       </div>
     </article>
@@ -425,6 +437,7 @@ using (regional = any (regionais_do_usuario()));</code></pre>
 <script src="lib/gsap.min.js"></script>
 <script src="lib/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
-<script src="app.js?v=13"></script>
+<script src="app.js?v=16"></script>
+<script type="module" src="cena3d.js?v=16"></script>
 </body>
 </html>

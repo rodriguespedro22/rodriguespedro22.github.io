@@ -438,12 +438,6 @@ html.js.motion .slip[data-rise].in { transform: rotate(-1deg); }
 .odo .col { display: flex; flex-direction: column; flex: none; }
 .odo .col > span { height: .9em; }
 
-/* flashlight: the cursor lights the dark room of the hero */
-html.lanterna .hero-shade {
-  -webkit-mask-image: radial-gradient(circle var(--raio, 240px) at var(--mx, 50%) var(--my, 50%), transparent 0, rgba(0,0,0,.35) 45%, #000 100%); /* taste-skill-ignore: cursor light requested by the client */
-          mask-image: radial-gradient(circle var(--raio, 240px) at var(--mx, 50%) var(--my, 50%), transparent 0, rgba(0,0,0,.35) 45%, #000 100%); /* taste-skill-ignore: cursor light requested by the client */
-}
-
 /* light that follows the cursor on dark bands */
 .f-ink, .back { --mx: -999px; --my: -999px; }
 .f-ink::before, .back::before {
@@ -460,6 +454,26 @@ html.lanterna .hero-shade {
 
 /* tilt toward the cursor */
 [data-tilt] { transform-style: preserve-3d; will-change: transform; }
+
+/* ---------- recorded screens of the live projects ---------- */
+.vid { display: grid; gap: 10px; }
+.vid-frame { position: relative; background: var(--ink); padding: 0 8px 8px; }
+.f-ink .vid-frame { background: var(--paper); }
+.vid-url { font: 700 var(--step-small)/1 var(--display); padding: 12px 6px; color: var(--on-ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.f-ink .vid-url { color: var(--ink); }
+.vid video { display: block; width: 100%; height: auto; aspect-ratio: 960 / 600; object-fit: cover; background: #0b1620; }
+.vid-btn {
+  position: absolute; right: 18px; bottom: 18px; min-height: 40px; padding: 0 14px;
+  background: var(--ink); color: var(--paper); border: 0; cursor: pointer;
+  font: 700 var(--step-small)/1 var(--display);
+  transition: background-color .16s var(--ease), color .16s var(--ease);
+}
+.vid-btn:hover { background: var(--bg); color: var(--ink); }
+.vid-btn:focus-visible { outline: 3px solid var(--bg); outline-offset: 2px; }
+
+/* ---------- 3D scene in the hero (Three.js); the screenshot stays as the fallback ---------- */
+.cena3d { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; display: block; }
+.hero.tem-3d .hero-bg, .hero.tem-3d .hero-shade { display: none; }
 
 /* ---------- tablet ---------- */
 @media (max-width: 1080px) {
