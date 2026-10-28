@@ -419,6 +419,48 @@ html.js.motion .slip[data-rise].in { transform: rotate(-1deg); }
 .ribbon .sep { display: inline-block; width: .5em; height: .3em; background: currentColor; opacity: .9;
   clip-path: polygon(.08em 0, 100% 0, 100% 100%, .08em 100%, 0 50%); }
 
+/* ---------- interactions studied from developer portfolios ---------- */
+.sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* role that rolls like a slot machine */
+.roll { display: inline-block; position: relative; overflow: hidden; vertical-align: bottom; white-space: nowrap; padding-bottom: .12em; margin-bottom: -.12em; }
+.roll > span { display: inline-block; }
+
+/* live clock in the bar */
+.clock { font: 700 var(--step-small)/1 var(--display); font-variant-numeric: tabular-nums; margin-right: auto; margin-left: 20px; }
+
+/* odometer figures */
+.nums { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px 48px; margin-bottom: clamp(56px, 7vw, 112px); }
+.nums > div { display: flex; flex-direction: column-reverse; gap: 8px; }
+.nums dt { font: 700 var(--step-small)/1.3 var(--display); }
+.nums dd { font: 700 var(--step-display)/.9 var(--display); letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+.odo { display: inline-flex; align-items: flex-start; overflow: hidden; height: .9em; line-height: .9; vertical-align: bottom; }
+.odo .col { display: flex; flex-direction: column; flex: none; }
+.odo .col > span { height: .9em; }
+
+/* flashlight: the cursor lights the dark room of the hero */
+html.lanterna .hero-shade {
+  -webkit-mask-image: radial-gradient(circle var(--raio, 240px) at var(--mx, 50%) var(--my, 50%), transparent 0, rgba(0,0,0,.35) 45%, #000 100%); /* taste-skill-ignore: cursor light requested by the client */
+          mask-image: radial-gradient(circle var(--raio, 240px) at var(--mx, 50%) var(--my, 50%), transparent 0, rgba(0,0,0,.35) 45%, #000 100%); /* taste-skill-ignore: cursor light requested by the client */
+}
+
+/* light that follows the cursor on dark bands */
+.f-ink, .back { --mx: -999px; --my: -999px; }
+.f-ink::before, .back::before {
+  content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(520px circle at var(--mx) var(--my), rgba(255, 122, 31, .2), transparent 65%); /* taste-skill-ignore: cursor light requested by the client */
+}
+.f-ink > .wrap, .back > .wrap { position: relative; z-index: 1; }
+
+/* hover: the others step back */
+.stubs .stub, .skill-list > div { transition: opacity .25s var(--ease); }
+@media (hover: hover) {
+  .stubs:hover .stub:not(:hover), .skill-list:hover > div:not(:hover) { opacity: .55; }
+}
+
+/* tilt toward the cursor */
+[data-tilt] { transform-style: preserve-3d; will-change: transform; }
+
 /* ---------- tablet ---------- */
 @media (max-width: 1080px) {
   .flow { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -435,6 +477,9 @@ html.js.motion .slip[data-rise].in { transform: rotate(-1deg); }
 /* ---------- phone ---------- */
 @media (max-width: 760px) {
   .bar nav a:not(.btn):not(:first-child) { display: none; }
+  .clock { display: none; }
+  .nums { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .nums dd { font-size: 12vw; }
   .hero { padding: 72px 8px 24px; align-items: center; }
   .ticket { --cut: auto; --notch: 14px; grid-template-columns: 1fr; }
   .ticket-main {

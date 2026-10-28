@@ -198,6 +198,94 @@
     requestAnimationFrame(andar);
   }
 
+  // Relógio de Charqueadas na barra.
+  var relogio = document.getElementById('relogio');
+  if (relogio && window.Intl) {
+    var hora = new Intl.DateTimeFormat('pt-BR', { timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit' });
+    var tic = function () { relogio.textContent = 'Charqueadas, ' + hora.format(new Date()); };
+    tic();
+    setInterval(tic, 15000);
+  }
+
+  var mouseFino = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  // Links da barra "decodificam" ao passar o mouse.
+  var simbolos = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789%$#';
+  var decodificar = function (el) {
+    if (el._decod) return;
+    var final = el.textContent, quadro = 0, total = 14;
+    el._decod = true;
+    var passo = function () {
+      quadro++;
+      var pronto = Math.floor(final.length * quadro / total);
+      el.textContent = final.split('').map(function (ch, i) {
+        return i < pronto || ch === ' ' ? ch : simbolos[(Math.random() * simbolos.length) | 0];
+      }).join('');
+      if (quadro < total) requestAnimationFrame(passo); else { el.textContent = final; el._decod = false; }
+    };
+    requestAnimationFrame(passo);
+  };
+  if (!reduce.matches && mouseFino) {
+    document.querySelectorAll('.bar nav a:not(.btn), .wordmark, .ticket-foot .tlink').forEach(function (a) {
+      a.addEventListener('mouseenter', function () { decodificar(a); });
+    });
+  }
+
+  if (!reduce.matches && mouseFino) {
+    // Lanterna: o cursor acende a sala escura do topo.
+    var heroEl = document.querySelector('.hero');
+    if (heroEl) {
+      root.classList.add('lanterna');
+      heroEl.addEventListener('pointermove', function (e) {
+        var r = heroEl.getBoundingClientRect();
+        heroEl.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+        heroEl.style.setProperty('--my', (e.clientY - r.top) + 'px');
+      });
+      heroEl.addEventListener('pointerleave', function () { heroEl.style.setProperty('--mx', '-999px'); });
+    }
+
+    // Luz que acompanha o cursor nas faixas escuras.
+    document.querySelectorAll('.f-ink, .back').forEach(function (el) {
+      el.addEventListener('pointermove', function (e) {
+        var r = el.getBoundingClientRect();
+        el.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+        el.style.setProperty('--my', (e.clientY - r.top) + 'px');
+      });
+      el.addEventListener('pointerleave', function () { el.style.setProperty('--mx', '-999px'); });
+    });
+
+    // Imagens e telas inclinam na direção do cursor.
+    document.querySelectorAll('[data-tilt]').forEach(function (el) {
+      var alvo = { x: 0, y: 0 }, atual = { x: 0, y: 0 }, rodando = false;
+      var mover = function () {
+        atual.x += (alvo.x - atual.x) * 0.12;
+        atual.y += (alvo.y - atual.y) * 0.12;
+        el.style.transform = 'perspective(1100px) rotateX(' + atual.y.toFixed(2) + 'deg) rotateY(' + atual.x.toFixed(2) + 'deg)';
+        if (Math.abs(alvo.x - atual.x) > 0.02 || Math.abs(alvo.y - atual.y) > 0.02) requestAnimationFrame(mover);
+        else rodando = false;
+      };
+      var ligar = function () { if (!rodando) { rodando = true; requestAnimationFrame(mover); } };
+      el.addEventListener('pointermove', function (e) {
+        var r = el.getBoundingClientRect();
+        alvo.x = ((e.clientX - r.left) / r.width - 0.5) * 10;
+        alvo.y = -((e.clientY - r.top) / r.height - 0.5) * 8;
+        ligar();
+      });
+      el.addEventListener('pointerleave', function () { alvo.x = 0; alvo.y = 0; ligar(); });
+    });
+
+    // Botões magnéticos: puxam levemente na direção do cursor.
+    document.querySelectorAll('.btn').forEach(function (b) {
+      b.addEventListener('pointermove', function (e) {
+        var r = b.getBoundingClientRect();
+        var x = (e.clientX - r.left - r.width / 2) * 0.25;
+        var y = (e.clientY - r.top - r.height / 2) * 0.35;
+        b.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px)';
+      });
+      b.addEventListener('pointerleave', function () { b.style.transform = ''; });
+    });
+  }
+
   if (!hasGsap || reduce.matches) return;
 
   // ---------- Cenas de rolagem (GSAP ScrollTrigger) ----------
@@ -342,6 +430,60 @@
     gsap.from(palavras, {
       yPercent: 115, rotate: 6, duration: 1.1, ease: 'expo.out', stagger: 0.08,
       scrollTrigger: { trigger: el, start: 'top 88%', once: true, refreshPriority: -1 }
+    });
+  });
+
+  // Entrada: a sala acende, o cupom sobe e o canhoto é carimbado.
+  gsap.timeline({ defaults: { ease: 'expo.out' } })
+    .from('.hero-bg', { autoAlpha: 0, duration: 1.2, ease: 'power2.out' }, 0)
+    .from('.ticket', { y: 140, rotation: -3, autoAlpha: 0, duration: 1.2 }, 0.1)
+    .from('.ticket-name span', { yPercent: 60, autoAlpha: 0, duration: 1, stagger: 0.08 }, 0.35)
+    .from('.ticket-stub > *', { scale: 1.25, autoAlpha: 0, duration: 0.5, stagger: 0.07, ease: 'back.out(2.2)' }, 0.75);
+
+  // Cargo que rola como caça-níquel.
+  var roll = document.querySelector('.roll');
+  if (roll) {
+    var palavras = roll.getAttribute('data-words').split('|');
+    var idx = 0;
+    roll.innerHTML = '<span>' + palavras[0] + '</span>';
+    var trocar = function () {
+      idx = (idx + 1) % palavras.length;
+      var velha = roll.firstElementChild;
+      var nova = document.createElement('span');
+      nova.textContent = palavras[idx];
+      nova.style.position = 'absolute'; nova.style.left = '0'; nova.style.top = '0';
+      roll.appendChild(nova);
+      var largura = nova.offsetWidth;
+      gsap.timeline({ onComplete: function () { velha.remove(); nova.style.position = ''; roll.style.width = ''; } })
+        .to(roll, { width: largura, duration: 0.6, ease: 'power3.inOut' }, 0)
+        .to(velha, { yPercent: -110, duration: 0.6, ease: 'power3.in' }, 0)
+        .fromTo(nova, { yPercent: 110 }, { yPercent: 0, duration: 0.7, ease: 'power3.out' }, 0.25);
+    };
+    roll.style.width = roll.firstElementChild.offsetWidth + 'px';
+    roll.style.width = '';
+    // Duas voltas completas e para em "full stack": movimento automático não fica rodando para sempre.
+    var trocas = 0;
+    var ciclo = setInterval(function () {
+      if (document.hidden || window.scrollY > window.innerHeight) return;
+      trocar();
+      if (++trocas >= palavras.length * 2) clearInterval(ciclo);
+    }, 2600);
+  }
+
+  // Números em odômetro: cada dígito gira até o valor quando aparece.
+  document.querySelectorAll('.odo').forEach(function (el) {
+    var alvo = el.getAttribute('data-n');
+    el.innerHTML = '<span class="sr">' + alvo + '</span>' + alvo.split('').map(function () {
+      var col = '<span class="col" aria-hidden="true">';
+      for (var n = 0; n <= 9; n++) col += '<span>' + n + '</span>';
+      return col + '</span>';
+    }).join('');
+    var cols = el.querySelectorAll('.col');
+    alvo.split('').forEach(function (dig, i) {
+      gsap.fromTo(cols[i], { yPercent: 0 }, {
+        yPercent: -Number(dig) * 10, duration: 1.6 + i * 0.25, ease: 'expo.out',
+        scrollTrigger: { trigger: el, start: 'top 90%', once: true, refreshPriority: -1 }
+      });
     });
   });
 

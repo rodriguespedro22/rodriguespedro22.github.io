@@ -29,7 +29,8 @@ GSAP 3.12.5 com ScrollTrigger (em `lib/`) e Lenis 1.1.13 (CDN, só com mouse ou 
 5. Canhotos da trajetória saem de um maço e se espalham; foto de Charqueadas recua; o verso do cupom vira ao chegar.
 6. Títulos sobem palavra por palavra.
 7. Fundo: campo de pontos (`<canvas id="campo">`) atrás das áreas laranja, que ondula com a rolagem e abre caminho para o cursor.
-8. Faixa de nomes (`.ribbon`): stack e projetos correndo de lado; acelera, inclina e troca de sentido com a rolagem. Os textos ficam em `index.html`.
+8. Interações estudadas em portfólios da lista developer-portfolios: lanterna do cursor no topo, cargo que rola (para em "full stack" depois de duas voltas), números em odômetro, relógio de Charqueadas, links que decodificam, botões magnéticos, imagens que inclinam e luz do cursor nas faixas escuras. Só com mouse, exceto o odômetro e o cargo.
+9. Faixa de nomes (`.ribbon`): stack e projetos correndo de lado; acelera, inclina e troca de sentido com a rolagem. Os textos ficam em `index.html`.
 
 Com "reduzir movimento" ligado no sistema, as cenas não rodam e a página fica estática e completa. Para testar mesmo assim, abra com `?movimento=1`.
 

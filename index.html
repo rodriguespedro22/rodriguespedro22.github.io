@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=10">
+<link rel="stylesheet" href="style.css?v=13">
 <script>document.documentElement.classList.add('js')</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Pedro Rodrigues da Cunha","jobTitle":"Desenvolvedor full stack","email":"mailto:pedro.dacunha02@gmail.com","address":{"@type":"PostalAddress","addressLocality":"Charqueadas","addressRegion":"RS","addressCountry":"BR"},"sameAs":["https://www.linkedin.com/in/pedrorodrigues2","https://github.com/rodriguespedro22"]}</script>
 </head>
@@ -29,6 +29,7 @@
 <header class="bar" id="bar">
   <div class="wrap bar-in">
     <a class="wordmark" href="#topo">Pedro Cunha</a>
+    <span class="clock" id="relogio" aria-hidden="true"></span>
     <nav aria-label="Seções">
       <a href="#painel">Projetos</a>
       <a href="#trajetoria">Trajetória</a>
@@ -46,7 +47,7 @@
     <div class="ticket" id="ticket">
       <div class="ticket-main">
         <h1 class="ticket-name"><span>Pedro</span> <span>Cunha</span></h1>
-        <p class="ticket-role">Desenvolvedor full stack</p>
+        <p class="ticket-role"><span class="sr">Desenvolvedor full stack</span><span aria-hidden="true">Desenvolvedor <span class="roll" data-words="full stack|de APIs e bancos|de painéis de dados|de interfaces">full stack</span></span></p>
         <div class="ticket-body">
           <ul class="facts">
             <li>Charqueadas, RS</li>
@@ -80,8 +81,13 @@
         </div>
       </div>
 
-      <div class="story">
-        <div class="steps">
+      <dl class="nums" data-rise>
+        <div><dt>Atualização dos números</dt><dd><span class="odo" data-n="30">30</span> min</dd></div>
+        <div><dt>Tabelas com Row Level Security</dt><dd><span class="odo" data-n="22">22</span></dd></div>
+        <div><dt>Telas na rotação da TV</dt><dd><span class="odo" data-n="6">6</span></dd></div>
+      </dl>
+
+      <div class="story">        <div class="steps">
           <article class="step" data-shot="0">
             <h3 class="h-lead">Uma tela no lugar das planilhas</h3>
             <p>A campanha criou vários cupons com regras diferentes: primeira compra, recuperação de clientes, rádio, influenciadores e outros. Sem uma visão única, gerentes, coordenadores e diretoria teriam de juntar planilhas e relatórios à mão.</p>
@@ -98,7 +104,7 @@
             <p>Filiais que não contam como loja e cupons que não devem aparecer ficam fora dos números, sempre pela mesma regra.</p>
           </article>
         </div>
-        <figure class="screen" aria-label="Telas do painel, com dados fictícios">
+        <figure class="screen" data-tilt aria-label="Telas do painel, com dados fictícios">
           <div class="tv"><div class="tv-in">
             <img class="shot is-on" src="img/tela-resultado.jpg" width="1242" height="698" alt="Tela Resultado: cupons usados, vendas com cupom, desconto concedido e gráfico de vendas por semana (dados fictícios)" loading="lazy">
             <img class="shot" src="img/tela-ranking.jpg" width="1242" height="698" alt="Tela Ranking: os dez cupons mais usados com venda, ticket e conversão, e o uso por departamento e setor (dados fictícios)" loading="lazy">
@@ -203,7 +209,7 @@ using (regional = any (regionais_do_usuario()));</code></pre>
             <p class="actions"><a class="tlink" href="https://github.com/rodriguespedro22/roleta-da-sorte" rel="noopener">Estudo de caso no GitHub</a></p>
           </div>
           <figure class="slip" data-rise>
-            <pre class="code code-paper" translate="no"><code>POST /girar
+            <pre class="code code-paper" translate="no" data-tilt><code>POST /girar
 { "cpf": "***.***.***-00", "captcha": "ok" }
 
 200 OK
@@ -230,7 +236,7 @@ using (regional = any (regionais_do_usuario()));</code></pre>
               <a class="tlink" href="https://github.com/rodriguespedro22/30-pra-show" rel="noopener">Código no GitHub</a>
             </p>
           </div>
-          <div class="pair" data-rise>
+          <div class="pair" data-rise data-tilt>
             <img src="img/show-home.jpg" width="1600" height="1000" alt="Página inicial do 30 pra Show com o título Seu próximo show começa aqui e cartazes de shows fictícios" loading="lazy">
             <img src="img/show-detalhe.jpg" width="1600" height="1000" alt="Página de um show fictício, Maré Alta, com data, local e escolha de setor com preços" loading="lazy">
           </div>
@@ -419,6 +425,6 @@ using (regional = any (regionais_do_usuario()));</code></pre>
 <script src="lib/gsap.min.js"></script>
 <script src="lib/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
-<script src="app.js?v=10"></script>
+<script src="app.js?v=13"></script>
 </body>
 </html>
