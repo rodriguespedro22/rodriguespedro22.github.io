@@ -461,7 +461,7 @@ html.js.motion .slip[data-rise].in { transform: rotate(-1deg); }
 .f-ink .vid-frame { background: var(--paper); }
 .vid-url { font: 700 var(--step-small)/1 var(--display); padding: 12px 6px; color: var(--on-ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .f-ink .vid-url { color: var(--ink); }
-.vid video { display: block; width: 100%; height: auto; aspect-ratio: 960 / 600; object-fit: cover; background: #0b1620; }
+.vid video { display: block; width: 100%; height: auto; aspect-ratio: 1280 / 800; object-fit: contain; background: #0b1620; }
 .vid-btn {
   position: absolute; right: 18px; bottom: 18px; min-height: 40px; padding: 0 14px;
   background: var(--ink); color: var(--paper); border: 0; cursor: pointer;

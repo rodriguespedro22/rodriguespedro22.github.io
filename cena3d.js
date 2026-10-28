@@ -121,15 +121,18 @@ function iniciar() {
     alvo.y = e.clientY / window.innerHeight - 0.5;
   }, { passive: true });
 
+  // Mede o tamanho que o canvas realmente tem na tela. O topo muda de altura sem a janela mudar
+  // (o cargo troca de texto, o cupom quebra linha, a barra do celular aparece), e o desenho
+  // precisa acompanhar para a cena não ficar esticada ou amassada.
   const medir = () => {
-    const w = hero.clientWidth, h = hero.clientHeight;
+    const w = Math.max(1, Math.round(canvas.clientWidth)), h = Math.max(1, Math.round(canvas.clientHeight));
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
     tv.scale.setScalar(camera.aspect < 1 ? 0.62 : camera.aspect < 1.3 ? 0.8 : 1);
   };
   medir();
-  window.addEventListener('resize', medir);
+  new ResizeObserver(medir).observe(canvas);
 
   let visivel = true;
   new IntersectionObserver((es) => { visivel = es[0].isIntersecting; if (visivel) video.play().catch(() => {}); else video.pause(); }).observe(hero);
