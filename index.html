@@ -12,19 +12,22 @@
 <meta property="og:image" content="https://rodriguespedro22.github.io/img/tela-resultado.jpg">
 <meta property="og:url" content="https://rodriguespedro22.github.io/">
 <link rel="canonical" href="https://rodriguespedro22.github.io/">
-<meta name="theme-color" content="#ff7a1f">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23ff7a1f'/%3E%3Ctext x='16' y='22' font-family='Arial' font-weight='700' font-size='15' text-anchor='middle' fill='%23050f16'%3EPC%3C/text%3E%3C/svg%3E">
+<meta name="theme-color" content="#070c12">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23070c12'/%3E%3Ctext x='16' y='22' font-family='Arial' font-weight='700' font-size='15' text-anchor='middle' fill='%23ff7a1f'%3EPC%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
-<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=17">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=20">
 <script>document.documentElement.classList.add('js')</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Pedro Rodrigues da Cunha","jobTitle":"Desenvolvedor full stack","email":"mailto:pedro.dacunha02@gmail.com","address":{"@type":"PostalAddress","addressLocality":"Charqueadas","addressRegion":"RS","addressCountry":"BR"},"sameAs":["https://www.linkedin.com/in/pedrorodrigues2","https://github.com/rodriguespedro22"]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Pedro Rodrigues da Cunha","jobTitle":"Desenvolvedor full stack","email":"mailto:pedro.dacunha02@gmail.com","url":"https://rodriguespedro22.github.io/","address":{"@type":"PostalAddress","addressLocality":"Charqueadas","addressRegion":"RS","addressCountry":"BR"},"alumniOf":[{"@type":"CollegeOrUniversity","name":"Instituto Federal Sul-Rio-Grandense"},{"@type":"CollegeOrUniversity","name":"Uniritter"}],"worksFor":{"@type":"Organization","name":"Grupo Lebes"},"sameAs":["https://www.linkedin.com/in/pedrorodrigues2","https://github.com/rodriguespedro22"]}</script>
 </head>
 <body>
 <canvas id="campo" aria-hidden="true"></canvas>
+<div class="cursor" id="cursor" aria-hidden="true"><i class="cursor-dot"></i><i class="cursor-ring"></i></div>
+<div class="progress" id="progresso" aria-hidden="true"></div>
 <a class="skip" href="#painel">Pular para os projetos</a>
 
 <header class="bar" id="bar">
@@ -32,8 +35,9 @@
     <a class="wordmark" href="#topo">Pedro Cunha</a>
     <span class="clock" id="relogio" aria-hidden="true"></span>
     <nav aria-label="Seções">
-      <a href="#painel">Projetos</a>
+      <a href="#trabalho">Projetos</a>
       <a href="#trajetoria">Trajetória</a>
+      <a href="#competencias">Stack</a>
       <a href="#sobre">Sobre</a>
       <a class="btn btn-sm" href="#contato">Contato</a>
     </nav>
@@ -41,43 +45,60 @@
 </header>
 
 <main>
-  <!-- O cupom: a peça que os sistemas do Pedro emitem e validam vira a apresentação -->
+  <!-- Topo: só tipografia sobre a sala escura em 3D (a TV do painel tocando a demonstração) -->
   <section class="hero" id="topo">
     <img class="hero-bg" src="img/tela-resultado.jpg" width="1242" height="698" alt="" fetchpriority="high">
     <div class="hero-shade" aria-hidden="true"></div>
-    <div class="ticket" id="ticket">
-      <div class="ticket-main">
-        <h1 class="ticket-name"><span>Pedro</span> <span>Cunha</span></h1>
-        <p class="ticket-role"><span class="sr">Desenvolvedor full stack</span><span aria-hidden="true">Desenvolvedor <span class="roll" data-words="full stack|de APIs e bancos|de painéis de dados|de interfaces">full stack</span></span></p>
-        <div class="ticket-body">
-          <ul class="facts">
-            <li>Charqueadas, RS</li>
-            <li>TypeScript, React, Postgres e Python</li>
-            <li>Aberto a vagas full stack</li>
-          </ul>
-          <p class="ticket-lead">Construo sistemas do banco de dados à tela: painéis, promoções online e ferramentas internas que ficam no ar e são usados todos os dias.</p>
-        </div>
-        <div class="ticket-foot">
+    <div class="hero-main" data-parallax>
+      <h1 class="hero-name"><span class="line"><span class="li">Pedro</span></span><span class="line l2"><span class="li">Cunha</span></span></h1>
+      <p class="hero-role">Desenvolvedor <b>full stack</b></p>
+    </div>
+    <div class="hero-foot">
+      <div class="hero-side">
+        <ul class="facts" aria-label="Resumo">
+          <li>Charqueadas, RS</li>
+          <li>TypeScript, React, Postgres e Python</li>
+          <li>Aberto a vagas full stack</li>
+        </ul>
+        <div class="hero-links">
           <a class="tlink" href="https://www.linkedin.com/in/pedrorodrigues2" rel="noopener">LinkedIn</a>
-          <a class="btn" href="#painel">Ver os projetos</a>
           <a class="tlink" href="https://github.com/rodriguespedro22" rel="noopener">GitHub</a>
+          <a class="tlink" href="mailto:pedro.dacunha02@gmail.com">E-mail</a>
         </div>
       </div>
-      <div class="ticket-stub">
-        <p class="stub-title">Fale comigo</p>
-        <a class="stub-mail" href="mailto:pedro.dacunha02@gmail.com">pedro.dacunha02@<wbr>gmail.com</a>
-        <p class="stub-note">Respondo por e-mail ou pelo LinkedIn.</p>
+      <div class="hero-sub">
+        <p class="hero-lead">Desenvolvedor full stack em Charqueadas, RS. Construo sistemas do banco de dados à tela: painéis, promoções online e ferramentas internas que ficam no ar e são usados todos os dias.</p>
+        <div class="hero-act">
+          <a class="btn" href="#trabalho">Ver os projetos</a>
+          <a class="tlink" href="#contato">Falar comigo</a>
+        </div>
       </div>
     </div>
   </section>
 
+  <!-- Projetos como um parágrafo em escala de cartaz; cada nome leva ao projeto -->
+  <section class="work" id="trabalho" aria-labelledby="work-t">
+    <div class="wrap">
+      <h2 id="work-t" class="h-head">Seis projetos</h2>
+      <ul class="names" id="names">
+        <li><a href="#painel">Painel TV de Cupons<span class="frame" aria-hidden="true"><img src="img/tela-resultado.jpg" width="1242" height="698" alt="" loading="lazy"></span></a></li>
+        <li><a href="#roleta">Roleta da Sorte</a></li>
+        <li><a href="#hub">Hub de Marketing</a></li>
+        <li><a href="#show">30 pra Show<span class="frame" aria-hidden="true"><img src="video/show.jpg" width="1280" height="800" alt="" loading="lazy"></span></a></li>
+        <li><a href="#mapa">Olha o Mapa!<span class="frame" aria-hidden="true"><img src="video/mapa.jpg" width="1280" height="800" alt="" loading="lazy"></span></a></li>
+        <li><a href="#pdf">Compressor de PDF</a></li>
+      </ul>
+      <p class="names-meta">Quatro sistemas profissionais em produção, um projeto acadêmico refeito e um app independente em desenvolvimento, de 2025 a 2026. Quando o código é de empresa, o repositório público traz o estudo de caso.</p>
+    </div>
+  </section>
+
   <!-- Projeto principal: história presa à tela da TV -->
-  <section class="painel" id="painel" aria-labelledby="painel-t">
+  <section class="painel field-paper" id="painel" aria-labelledby="painel-t">
     <div class="wrap">
       <div class="sec-head" data-rise>
         <h2 id="painel-t" class="h-head">Painel TV de Cupons</h2>
         <div class="sec-intro">
-          <p class="lead">Uma tela com os números de uma campanha de cupons de varejo, atualizada a cada 30 minutos, na TV da diretoria e no celular dos gestores.</p>
+          <p class="lead">Uma tela com os números de uma campanha de cupons de varejo, atualizada a cada 30 minutos, na TV da diretoria e no celular dos gestores, no lugar da consolidação manual de planilhas.</p>
           <p>Projeto profissional de 2026, em produção. Fiz de ponta a ponta: banco, carga de dados, API, login, telas, testes e publicação.</p>
         </div>
       </div>
@@ -88,7 +109,8 @@
         <div><dt>Telas na rotação da TV</dt><dd><span class="odo" data-n="6">6</span></dd></div>
       </dl>
 
-      <div class="story">        <div class="steps">
+      <div class="story">
+        <div class="steps">
           <article class="step" data-shot="0">
             <h3 class="h-lead">Uma tela no lugar das planilhas</h3>
             <p>A campanha criou vários cupons com regras diferentes: primeira compra, recuperação de clientes, rádio, influenciadores e outros. Sem uma visão única, gerentes, coordenadores e diretoria teriam de juntar planilhas e relatórios à mão.</p>
@@ -105,8 +127,8 @@
             <p>Filiais que não contam como loja e cupons que não devem aparecer ficam fora dos números, sempre pela mesma regra.</p>
           </article>
         </div>
-        <figure class="screen" data-tilt aria-label="Telas do painel, com dados fictícios">
-          <div class="tv"><div class="tv-in">
+        <figure class="screen" aria-label="Telas do painel, com dados fictícios">
+          <div class="tv" data-tilt><div class="tv-in">
             <img class="shot is-on" src="img/tela-resultado.jpg" width="1242" height="698" alt="Tela Resultado: cupons usados, vendas com cupom, desconto concedido e gráfico de vendas por semana (dados fictícios)" loading="lazy">
             <img class="shot" src="img/tela-ranking.jpg" width="1242" height="698" alt="Tela Ranking: os dez cupons mais usados com venda, ticket e conversão, e o uso por departamento e setor (dados fictícios)" loading="lazy">
             <img class="shot" src="img/tela-onde.jpg" width="1242" height="698" alt="Tela Onde: resultado por regional e as dez filiais que mais venderam com cupom (dados fictícios)" loading="lazy">
@@ -123,7 +145,7 @@
         <ol class="flow">
           <li class="is-at"><b>Power BI</b><span>Origem das vendas e do uso dos cupons.</span></li>
           <li><b>Carga a cada 30 min</b><span>Scripts em PowerShell consultam o Power BI com DAX e somam as regras da planilha de controle.</span></li>
-          <li><b>Supabase</b><span>PostgreSQL com Row Level Security e login com MFA.</span></li>
+          <li><b>Supabase</b><span>PostgreSQL com Row Level Security em 22 tabelas e login com MFA.</span></li>
           <li><b>Edge Function</b><span>Única saída dos dados: confere usuário, MFA, sessão e regionais.</span></li>
           <li><b>Painel web</b><span>HTML, CSS e JavaScript na Netlify, para TV, celular e notebook.</span></li>
         </ol>
@@ -190,209 +212,249 @@ using (regional = any (regionais_do_usuario()));</code></pre>
     <div class="ribbon-row is-alt" data-dir="1"><div class="ribbon-track"><span>Painel TV de Cupons</span><i class="sep"></i><span>Roleta da Sorte</span><i class="sep"></i><span>Hub de Marketing</span><i class="sep"></i><span>30 pra Show</span><i class="sep"></i><span>Compressor de PDF</span><i class="sep"></i><span>Olha o Mapa!</span><i class="sep"></i></div></div>
   </div>
 
-  <!-- Outros projetos: pastas com aba -->
-  <section class="projects" id="projetos" aria-labelledby="proj-t">
+  <!-- Outros projetos: trilho horizontal preso à tela no desktop, pilha no celular -->
+  <section class="showcase" id="projetos" aria-labelledby="proj-t">
     <div class="wrap proj-head" data-rise>
       <h2 id="proj-t" class="h-head">Outros projetos</h2>
-      <p class="lead">Três sistemas profissionais, um projeto acadêmico refeito e um app em desenvolvimento. Quando o código é de empresa, o repositório público traz o estudo de caso.</p>
+      <p class="lead">Três sistemas profissionais, um projeto acadêmico refeito e um app em desenvolvimento. No desktop, role para percorrer o trilho.</p>
     </div>
+    <div class="rail" id="rail">
+      <div class="track" id="track">
 
-    <article class="folder f-ink" id="roleta" aria-labelledby="roleta-t">
-      <div class="folder-dim" aria-hidden="true"></div>
-      <div class="wrap">
-        <h3 class="tab" id="roleta-t">Roleta da Sorte</h3>
-        <div class="folder-in">
-          <div class="folder-text" data-rise>
-            <p class="lead">Promoção online em que o cliente informa seus dados, gira a roleta e ganha um cupom para usar na loja.</p>
-            <p>Projeto profissional de 2026. Foi usada em uma campanha real, já encerrada, e o ambiente foi desativado.</p>
-            <p>Uma promoção com sorteio precisa ser divertida para quem joga e difícil de burlar para quem organiza. Por isso o sorteio acontece no banco, em funções SQL que também fazem a baixa do cupom no caixa uma única vez. Construí tudo: modelagem, funções, Edge Function, front-end, painel administrativo com segundo fator e auditoria, alarme de volume por e-mail e testes de ponta a ponta.</p>
-            <p class="stack"><b>Stack:</b> TypeScript, Deno, Supabase, PostgreSQL com RLS, pg_cron, Cloudflare Turnstile e Vercel.</p>
-            <p class="actions"><a class="tlink" href="https://github.com/rodriguespedro22/roleta-da-sorte" rel="noopener">Estudo de caso no GitHub</a></p>
-          </div>
-          <figure class="slip" data-rise>
-            <pre class="code code-paper" translate="no" data-tilt><code>POST /girar
+        <article class="panel p-ink" id="roleta" aria-labelledby="roleta-t">
+          <div class="panel-in">
+            <div class="panel-text">
+              <h3 class="h-head panel-t" id="roleta-t">Roleta da Sorte</h3>
+              <p class="lead">Promoção online em que o cliente informa seus dados, gira a roleta e ganha um cupom para usar na loja.</p>
+              <p>Projeto profissional de 2026. Foi usada em uma campanha real, já encerrada, com aproximadamente 1.300 cupons utilizados, e o ambiente foi desativado.</p>
+              <p>Uma promoção com sorteio precisa ser divertida para quem joga e difícil de burlar para quem organiza. Por isso o sorteio acontece no banco, em funções SQL que também fazem a baixa do cupom no caixa uma única vez. Construí tudo: modelagem, funções, Edge Function, front-end com captcha, painel administrativo com segundo fator e auditoria, resgate no caixa, alarme de volume por e-mail e testes de ponta a ponta.</p>
+              <p class="stack"><b>Stack:</b> TypeScript, Deno, Supabase, PostgreSQL com RLS, pg_cron, Cloudflare Turnstile e Vercel.</p>
+              <p class="actions"><a class="tlink" href="https://github.com/rodriguespedro22/roleta-da-sorte" rel="noopener">Estudo de caso no GitHub</a></p>
+            </div>
+            <figure class="slip" data-float>
+              <pre class="code code-paper" translate="no" data-tilt><code>POST /girar
 { "cpf": "***.***.***-00", "captcha": "ok" }
 
 200 OK
 { "fatia": 3,
   "premio": "10% de desconto",
   "cupom": "ROLETA-7K2Q" }</code></pre>
-            <figcaption>Exemplo ilustrativo: o prêmio já chega decidido pelo servidor. O navegador só anima a roleta até a fatia certa.</figcaption>
-          </figure>
-        </div>
-      </div>
-    </article>
-
-    <article class="folder f-paper" id="show" aria-labelledby="show-t">
-      <div class="folder-dim" aria-hidden="true"></div>
-      <div class="wrap">
-        <h3 class="tab" id="show-t">30 pra Show</h3>
-        <div class="folder-in">
-          <div class="folder-text" data-rise>
-            <p class="lead">Site de venda de ingressos: catálogo com filtros, compra por setor, ingresso com código e área de administração.</p>
-            <p>Projeto acadêmico refeito em 2026. A versão original era em PHP e MySQL. Refiz a interface em React e TypeScript, com animações de rolagem, artistas fictícios e dados de demonstração guardados no navegador, para que qualquer pessoa teste o fluxo completo sem cadastro.</p>
-            <p class="stack"><b>Stack:</b> React, TypeScript, Vite, Tailwind CSS, Motion e React Router, com CI e publicação no GitHub Pages.</p>
-            <p class="actions">
-              <a class="btn" href="https://rodriguespedro22.github.io/30-pra-show/" rel="noopener">Ver no ar</a>
-              <a class="tlink" href="https://github.com/rodriguespedro22/30-pra-show" rel="noopener">Código no GitHub</a>
-            </p>
+              <figcaption>Exemplo ilustrativo: o prêmio já chega decidido pelo servidor. O navegador só anima a roleta até a fatia certa.</figcaption>
+            </figure>
           </div>
-          <figure class="vid" data-rise>
-            <div class="vid-frame" data-ui data-tilt>
-              <p class="vid-url" aria-hidden="true">rodriguespedro22.github.io/30-pra-show</p>
-              <video src="video/show.webm" poster="video/show.jpg" width="1280" height="800" muted loop playsinline preload="none" aria-label="Gravação de tela da página inicial do 30 pra Show sendo rolada, com cartazes de shows fictícios"></video>
-              <button class="vid-btn" type="button">Pausar</button>
+        </article>
+
+        <article class="panel p-paper" id="show" aria-labelledby="show-t">
+          <div class="panel-in">
+            <div class="panel-text">
+              <h3 class="h-head panel-t" id="show-t">30 pra Show</h3>
+              <p class="lead">Site de venda de ingressos: catálogo com filtros, compra por setor, ingresso com código e área de administração.</p>
+              <p>Projeto acadêmico refeito em 2026. A versão original era em PHP e MySQL. Refiz a interface em React e TypeScript, com animações de rolagem, artistas fictícios e dados de demonstração guardados no navegador, para que qualquer pessoa teste o fluxo completo sem cadastro.</p>
+              <p class="stack"><b>Stack:</b> React, TypeScript, Vite, Tailwind CSS, Motion e React Router, com CI e publicação no GitHub Pages.</p>
+              <p class="actions">
+                <a class="btn" href="https://rodriguespedro22.github.io/30-pra-show/" rel="noopener">Ver no ar</a>
+                <a class="tlink" href="https://github.com/rodriguespedro22/30-pra-show" rel="noopener">Código no GitHub</a>
+              </p>
             </div>
-            <figcaption>Gravação do site no ar, com artistas fictícios.</figcaption>
-          </figure>
-        </div>
-      </div>
-    </article>
+            <figure class="vid" data-float>
+              <div class="vid-frame" data-ui data-tilt>
+                <p class="vid-url" aria-hidden="true">rodriguespedro22.github.io/30-pra-show</p>
+                <video src="video/show.webm" poster="video/show.jpg" width="1280" height="800" muted loop playsinline preload="none" aria-label="Gravação de tela da página inicial do 30 pra Show sendo rolada, com cartazes de shows fictícios"></video>
+                <button class="vid-btn" type="button">Pausar</button>
+              </div>
+              <figcaption>Gravação do site no ar, com artistas fictícios.</figcaption>
+            </figure>
+          </div>
+        </article>
 
-    <article class="folder f-light" id="hub" aria-labelledby="hub-t">
-      <div class="folder-dim" aria-hidden="true"></div>
-      <div class="wrap">
-        <h3 class="tab" id="hub-t">Hub de Marketing</h3>
-        <div class="folder-in">
-          <div class="folder-text" data-rise>
-            <p class="lead">Plataforma do time de marketing de uma rede de varejo: peças, marcas, campanhas e ajuda em um só lugar.</p>
-            <p>Projeto profissional de 2026. Recebeu um destaque em inovação na empresa em julho de 2026.</p>
-            <p>Peças, logotipos e arquivos de campanha ficavam espalhados em pastas e conversas. Construí o front-end completo: telas, editor de peças com sugestão de layout por IA, permissões por perfil, área administrativa e publicação.</p>
-            <p class="stack"><b>Stack:</b> React, Vite, Tailwind CSS, JavaScript, Gemini API e Vercel.</p>
-            <p class="actions"><a class="tlink" href="https://github.com/rodriguespedro22/hub-de-marketing" rel="noopener">Estudo de caso no GitHub</a></p>
-          </div>
-          <dl class="modules" data-rise>
-            <div><dt>Estúdio Criativo</dt><dd>Editor de cards, revistas e banners no padrão da marca, com layouts sugeridos por IA.</dd></div>
-            <div><dt>Central das Marcas</dt><dd>Logotipos, cores, tipografia e tom de voz.</dd></div>
-            <div><dt>Central de Campanhas</dt><dd>Arquivos de campanha e calendário do mês.</dd></div>
-            <div><dt>Central de Apoio</dt><dd>Tutoriais, perguntas frequentes e contatos do time.</dd></div>
-            <div><dt>Administração</dt><dd>Usuários, permissões e os arquivos de cada central.</dd></div>
-          </dl>
-        </div>
-      </div>
-    </article>
-
-    <article class="folder f-ink" id="pdf" aria-labelledby="pdf-t">
-      <div class="folder-dim" aria-hidden="true"></div>
-      <div class="wrap">
-        <h3 class="tab" id="pdf-t">Compressor de PDF</h3>
-        <div class="folder-in">
-          <div class="folder-text" data-rise>
-            <p class="lead">Ferramenta na rede interna que reduz catálogos e revistas em PDF sem mandar arquivo da empresa para sites de fora.</p>
-            <p>Projeto profissional de 2026. Qualquer colega abre pelo navegador, sem instalar nada. O arquivo é processado em memória e descartado depois do download. Em testes, a redução chegou a até 96%, dependendo do conteúdo.</p>
-            <p class="stack"><b>Stack:</b> Python, Flask, HTML, CSS e JavaScript.</p>
-            <p class="actions"><a class="tlink" href="https://github.com/rodriguespedro22/compressor-de-pdf" rel="noopener">Estudo de caso no GitHub</a></p>
-          </div>
-          <div class="levels" data-ui data-rise>
-            <table>
-              <caption>Os três níveis de compressão</caption>
-              <thead><tr><th scope="col">Nível</th><th scope="col">Resolução</th><th scope="col">JPEG</th><th scope="col">Para</th></tr></thead>
-              <tbody>
-                <tr><td>Alta</td><td>150 DPI</td><td>75%</td><td>Texto fino</td></tr>
-                <tr><td>Média</td><td>100 DPI</td><td>65%</td><td>Revistas e catálogos</td></tr>
-                <tr><td>Máxima</td><td>72 DPI</td><td>50%</td><td>Menor arquivo</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </article>
-
-    <article class="folder f-light f-last" id="mapa" aria-labelledby="mapa-t">
-      <div class="folder-dim" aria-hidden="true"></div>
-      <div class="wrap">
-        <h3 class="tab" id="mapa-t">Olha o Mapa!</h3>
-        <div class="folder-in">
-          <div class="folder-text" data-rise>
-            <p class="lead">App de treino diário para jogadores de League of Legends, em português, com lições curtas e dados de campeões.</p>
-            <p>Projeto pessoal em desenvolvimento e já no ar; o código fica em repositório privado. As lições e os dados ficam no Postgres, então o conteúdo muda sem novo deploy. Login, progresso sincronizado entre aparelhos e testes de ponta a ponta já funcionam.</p>
-            <p>Projeto de fã, não endossado pela Riot Games.</p>
-            <p class="stack"><b>Stack:</b> Next.js, React, TypeScript, Tailwind CSS, Supabase, Vitest e Playwright.</p>
-            <p class="actions"><a class="btn" href="https://olhaomapa.vercel.app/apresentacao" rel="noopener">Ver no ar</a></p>
-          </div>
-          <figure class="vid" data-rise>
-            <div class="vid-frame" data-ui data-tilt>
-              <p class="vid-url" aria-hidden="true">olhaomapa.vercel.app/apresentacao</p>
-              <video src="video/mapa.webm" poster="video/mapa.jpg" width="1280" height="800" muted loop playsinline preload="none" aria-label="Gravação de tela da página de apresentação do Olha o Mapa!, com uma questão de treino e a tela do treino do dia"></video>
-              <button class="vid-btn" type="button">Pausar</button>
+        <article class="panel p-orange" id="hub" aria-labelledby="hub-t">
+          <div class="panel-in">
+            <div class="panel-text">
+              <h3 class="h-head panel-t" id="hub-t">Hub de Marketing</h3>
+              <p class="lead">Plataforma do time de marketing de uma rede de varejo: peças, marcas, campanhas e ajuda em um só lugar.</p>
+              <p>Projeto profissional de 2026, em evolução. Recebeu um destaque em inovação na empresa em julho de 2026.</p>
+              <p>Peças, logotipos e arquivos de campanha ficavam espalhados em pastas e conversas. Construí o front-end completo: telas, editor de peças com sugestão de layout por IA (Gemini), guia de marcas, arquivos de campanha, permissões por perfil, área administrativa e publicação.</p>
+              <p class="stack"><b>Stack:</b> React, Vite, Tailwind CSS, JavaScript, Gemini API e Vercel.</p>
+              <p class="actions"><a class="tlink" href="https://github.com/rodriguespedro22/hub-de-marketing" rel="noopener">Estudo de caso no GitHub</a></p>
             </div>
-            <figcaption>Gravação da página de apresentação, no ar.</figcaption>
-          </figure>
-        </div>
+            <dl class="modules" data-float>
+              <div><dt>Estúdio Criativo</dt><dd>Editor de cards, revistas e banners no padrão da marca, com layouts sugeridos por IA.</dd></div>
+              <div><dt>Central das Marcas</dt><dd>Logotipos, cores, tipografia e tom de voz.</dd></div>
+              <div><dt>Central de Campanhas</dt><dd>Arquivos de campanha e calendário do mês.</dd></div>
+              <div><dt>Central de Apoio</dt><dd>Tutoriais, perguntas frequentes e contatos do time.</dd></div>
+              <div><dt>Administração</dt><dd>Usuários, permissões e os arquivos de cada central.</dd></div>
+            </dl>
+          </div>
+        </article>
+
+        <article class="panel p-ink" id="pdf" aria-labelledby="pdf-t">
+          <div class="panel-in">
+            <div class="panel-text">
+              <h3 class="h-head panel-t" id="pdf-t">Compressor de PDF</h3>
+              <p class="lead">Ferramenta na rede interna que reduz catálogos e revistas em PDF sem mandar arquivo da empresa para sites de fora.</p>
+              <p>Projeto profissional de 2025. Qualquer colega abre pelo navegador, sem instalar nada. O arquivo é processado em memória e descartado depois do download, com três níveis de compressão. Em testes, a redução chegou a até 96%, dependendo do conteúdo.</p>
+              <p class="stack"><b>Stack:</b> Python, Flask, HTML, CSS e JavaScript.</p>
+              <p class="actions"><a class="tlink" href="https://github.com/rodriguespedro22/compressor-de-pdf" rel="noopener">Estudo de caso no GitHub</a></p>
+            </div>
+            <div class="levels" data-ui data-float>
+              <table>
+                <caption>Os três níveis de compressão</caption>
+                <thead><tr><th scope="col">Nível</th><th scope="col">Resolução</th><th scope="col">JPEG</th><th scope="col">Para</th></tr></thead>
+                <tbody>
+                  <tr><td>Alta</td><td>150 DPI</td><td>75%</td><td>Texto fino</td></tr>
+                  <tr><td>Média</td><td>100 DPI</td><td>65%</td><td>Revistas e catálogos</td></tr>
+                  <tr><td>Máxima</td><td>72 DPI</td><td>50%</td><td>Menor arquivo</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel p-paper" id="mapa" aria-labelledby="mapa-t">
+          <div class="panel-in">
+            <div class="panel-text">
+              <h3 class="h-head panel-t" id="mapa-t">Olha o Mapa!</h3>
+              <p class="lead">App independente de treino diário para jogadores de League of Legends, em português, com lições curtas e dados de campeões.</p>
+              <p>Projeto pessoal em desenvolvimento e já no ar. O código fica em repositório privado. As lições e os dados ficam no Postgres, então o conteúdo muda sem novo deploy. Login, progresso sincronizado entre aparelhos e testes de ponta a ponta já funcionam.</p>
+              <p>Projeto de fã, sem vínculo com a desenvolvedora do jogo.</p>
+              <p class="stack"><b>Stack:</b> Next.js, React, TypeScript, Tailwind CSS, Supabase, Vitest e Playwright.</p>
+              <p class="actions"><a class="btn" href="https://olhaomapa.vercel.app/apresentacao" rel="noopener">Ver no ar</a></p>
+            </div>
+            <figure class="vid" data-float>
+              <div class="vid-frame" data-ui data-tilt>
+                <p class="vid-url" aria-hidden="true">olhaomapa.vercel.app/apresentacao</p>
+                <video src="video/mapa.webm" poster="video/mapa.jpg" width="1280" height="800" muted loop playsinline preload="none" aria-label="Gravação de tela da página de apresentação do Olha o Mapa!, com uma questão de treino e a tela do treino do dia"></video>
+                <button class="vid-btn" type="button">Pausar</button>
+              </div>
+              <figcaption>Gravação da página de apresentação, no ar.</figcaption>
+            </figure>
+          </div>
+        </article>
+
       </div>
-    </article>
+    </div>
   </section>
 
-  <!-- Trajetória: canhotos -->
-  <section class="path" id="trajetoria" aria-labelledby="path-t">
+  <!-- Números: coluna alinhada como um livro-razão -->
+  <section class="ledger" id="numeros" aria-labelledby="num-t">
+    <div class="wrap ledger-in">
+      <h2 id="num-t" class="ledger-t"><span>O que ficou</span><span>em números</span></h2>
+      <dl class="rows" data-rise>
+        <div><dd><span class="odo" data-n="1.300">1.300</span></dd><dt>cupons utilizados na Roleta da Sorte, em uma campanha real</dt></div>
+        <div><dd><span class="odo" data-n="96">96</span></dd><dt>por cento de redução de tamanho no Compressor de PDF, em testes</dt></div>
+        <div><dd><span class="odo" data-n="30">30</span></dd><dt>minutos entre cada atualização automática do Painel TV de Cupons</dt></div>
+        <div><dd><span class="odo" data-n="2">2</span></dd><dt>horas por dia poupadas com a automação do Painel Diário de Vendas</dt></div>
+        <div><dd><span class="odo" data-n="600">600</span></dd><dt>usuários atendidos em três unidades no Service Desk</dt></div>
+        <div><dd><span class="odo" data-n="70">70</span></dd><dt>computadores sob suporte na JGB, no primeiro emprego</dt></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- Trajetória: linha que se desenha com a rolagem -->
+  <section class="path field-paper" id="trajetoria" aria-labelledby="path-t">
     <div class="wrap">
       <div class="sec-head" data-rise>
         <h2 id="path-t" class="h-head">Trajetória</h2>
         <p class="lead">Do suporte de TI ao desenvolvimento: primeiro aprendi como os sistemas se comportam na mão de quem usa, depois passei a construí-los.</p>
       </div>
-      <ol class="stubs">
-        <li class="stub" data-rise>
-          <p class="when">Julho de 2025 até hoje</p>
-          <h3 class="h-lead">Desenvolvimento, dados e automação</h3>
-          <p class="where">Grupo Lebes</p>
-          <p>Painel TV de Cupons, Roleta da Sorte, Hub de Marketing e Compressor de PDF, colocados em produção. Cargas automáticas de dados do Power BI para o banco, com DAX e PowerShell.</p>
-        </li>
-        <li class="stub" data-rise>
-          <p class="when">Junho de 2024 a julho de 2025</p>
-          <h3 class="h-lead">Técnico de Service Desk</h3>
-          <p class="where">Grupo Lebes</p>
-          <p>Suporte a cerca de 600 usuários em 3 unidades, com Active Directory, OCS Inventory e Fortinet.</p>
-        </li>
-        <li class="stub" data-rise>
-          <p class="when">Fevereiro de 2023 a junho de 2024</p>
-          <h3 class="h-lead">Aprendiz de TI</h3>
-          <p class="where">JGB Equipamentos de Segurança</p>
-          <p>Sistema de vagas em PHP e MySQL, página de Sustentabilidade e suporte a cerca de 70 computadores.</p>
-        </li>
-      </ol>
+      <div class="timeline">
+        <i class="rail-line" aria-hidden="true"><b></b></i>
+        <ol class="jobs">
+          <li class="job" data-rise>
+            <p class="when">Julho de 2025 até hoje</p>
+            <div class="job-body">
+              <h3 class="h-lead">Analista de CRM</h3>
+              <p class="where">Grupo Lebes, desenvolvimento, dados e automação</p>
+              <ul class="bullets">
+                <li>Criação do Painel TV de Cupons, painel de campanha promocional com atualização automática a cada 30 minutos para a TV da diretoria e os celulares dos gestores.</li>
+                <li>Automação do Painel Diário de Vendas, integrando cerca de seis modelos semânticos e reduzindo o esforço operacional em aproximadamente duas horas por dia.</li>
+                <li>Dashboards e integrações de dados em Power BI, SQL e Python, além de aplicação web para o evento de 70 anos da empresa, com integração ao SharePoint.</li>
+                <li>Também em produção: Roleta da Sorte, Hub de Marketing e Compressor de PDF, com cargas automáticas de dados do Power BI para o banco (consultas DAX e PowerShell).</li>
+              </ul>
+            </div>
+          </li>
+          <li class="job" data-rise>
+            <p class="when">Junho de 2024 a julho de 2025</p>
+            <div class="job-body">
+              <h3 class="h-lead">Técnico de Service Desk</h3>
+              <p class="where">Grupo Lebes</p>
+              <ul class="bullets">
+                <li>Infraestrutura, gestão de acessos e suporte técnico para cerca de 600 usuários em três unidades, com Active Directory, OCS Inventory, SSH e Fortinet.</li>
+              </ul>
+            </div>
+          </li>
+          <li class="job" data-rise>
+            <p class="when">Fevereiro de 2023 a junho de 2024</p>
+            <div class="job-body">
+              <h3 class="h-lead">Aprendiz de TI</h3>
+              <p class="where">JGB Equipamentos de Segurança</p>
+              <ul class="bullets">
+                <li>Sistema interno de divulgação de vagas em PHP, MySQL e JavaScript, integrado ao portal de carreiras.</li>
+                <li>Página institucional em HTML, CSS e JavaScript, incluindo a página de Sustentabilidade.</li>
+                <li>Suporte técnico a cerca de 70 computadores.</li>
+              </ul>
+            </div>
+          </li>
+        </ol>
+      </div>
 
       <div class="twocol">
         <div class="study" data-rise>
           <h3 class="h-lead">Formação</h3>
           <ul class="plain">
-            <li><b>Tecnologia em Sistemas para Internet</b>, IFSul, de 2025 a 2028, em andamento.</li>
-            <li><b>Técnico em Informática</b>, IFSul, de 2020 a 2023.</li>
-            <li><b>Inglês</b>, nível B1.</li>
+            <li><b>Tecnologia em Sistemas para Internet</b>, Instituto Federal Sul-Rio-Grandense (IFSul), desde março de 2025, conclusão prevista em dezembro de 2028.</li>
+            <li><b>Tecnologia em Sistemas para Internet (EAD)</b>, Uniritter, de janeiro de 2024 a março de 2025.</li>
+            <li><b>Técnico em Informática</b>, Instituto Federal Sul-Rio-Grandense (IFSul), de fevereiro de 2020 a dezembro de 2023.</li>
           </ul>
         </div>
-        <div class="skills" data-rise>
-          <h3 class="h-lead">Onde usei cada ferramenta</h3>
-          <dl class="skill-list">
-            <div><dt>TypeScript e JavaScript</dt><dd>Roleta da Sorte, 30 pra Show, Painel TV de Cupons, Hub de Marketing</dd></div>
-            <div><dt>React, Next.js, Vite e Tailwind</dt><dd>30 pra Show, Hub de Marketing, Olha o Mapa!</dd></div>
-            <div><dt>PostgreSQL, Supabase e SQL</dt><dd>Painel TV de Cupons, Roleta da Sorte, Olha o Mapa!</dd></div>
-            <div><dt>Deno e Edge Functions</dt><dd>Roleta da Sorte, Painel TV de Cupons</dd></div>
-            <div><dt>Python e Flask</dt><dd>Compressor de PDF</dd></div>
-            <div><dt>Power BI, DAX e PowerShell</dt><dd>Carga de dados do Painel TV de Cupons</dd></div>
-            <div><dt>Playwright, Vitest e GitHub Actions</dt><dd>Painel TV de Cupons, 30 pra Show, Olha o Mapa!</dd></div>
-            <div><dt>PHP e MySQL</dt><dd>Sistema de vagas na JGB e a versão original do 30 pra Show</dd></div>
-          </dl>
+        <div class="langs" data-rise>
+          <h3 class="h-lead">Idiomas</h3>
+          <ul class="plain">
+            <li><b>Português</b>, nativo.</li>
+            <li><b>Inglês</b>, nível B1.</li>
+          </ul>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Sobre: carta em folha com canhoto -->
+  <!-- Competências: cada categoria em uma linha, tudo no mesmo tamanho -->
+  <section class="skills" id="competencias" aria-labelledby="skills-t">
+    <div class="wrap">
+      <h2 id="skills-t" class="h-head" data-rise>Competências técnicas</h2>
+      <dl class="skill-rows">
+        <div data-rise><dt>Linguagens</dt><dd>JavaScript, TypeScript, Python, Java, C++, PHP, SQL, PL/pgSQL</dd></div>
+        <div data-rise><dt>Front-end</dt><dd>React, Next.js, HTML5, CSS3, Vite, jQuery, Tailwind CSS, Sass/SCSS, Bootstrap, Chart.js</dd></div>
+        <div data-rise><dt>Back-end e dados</dt><dd>Node.js, Express.js, Flask, APIs REST, PostgreSQL, MySQL, Prisma ORM, Supabase, BigQuery, Firebase, MCP, Deno</dd></div>
+        <div data-rise><dt>Ferramentas</dt><dd>Git, GitHub, Docker, DBeaver, Postman, Jest, Supertest, Playwright, Vercel, Netlify, GitHub Actions, Power BI, Looker, PowerShell, Android Studio, Google Analytics 4, Claude Code, OpenAI Codex, Maestri</dd></div>
+      </dl>
+      <div class="used" data-rise>
+        <h3 class="h-lead">Onde usei cada ferramenta</h3>
+        <dl class="skill-list">
+          <div><dt>TypeScript e JavaScript</dt><dd>Roleta da Sorte, 30 pra Show, Painel TV de Cupons, Hub de Marketing</dd></div>
+          <div><dt>React, Next.js, Vite e Tailwind</dt><dd>30 pra Show, Hub de Marketing, Olha o Mapa!</dd></div>
+          <div><dt>PostgreSQL, Supabase e SQL</dt><dd>Painel TV de Cupons, Roleta da Sorte, Olha o Mapa!</dd></div>
+          <div><dt>Deno e Edge Functions</dt><dd>Roleta da Sorte, Painel TV de Cupons</dd></div>
+          <div><dt>Python e Flask</dt><dd>Compressor de PDF, integrações de dados</dd></div>
+          <div><dt>Power BI, DAX e PowerShell</dt><dd>Carga de dados do Painel TV de Cupons, Painel Diário de Vendas</dd></div>
+          <div><dt>Playwright, Vitest e GitHub Actions</dt><dd>Painel TV de Cupons, 30 pra Show, Olha o Mapa!</dd></div>
+          <div><dt>PHP e MySQL</dt><dd>Sistema de vagas na JGB e a versão original do 30 pra Show</dd></div>
+          <div><dt>Active Directory, OCS Inventory, SSH e Fortinet</dt><dd>Service Desk do Grupo Lebes</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sobre: texto grande em duas colunas, com os fatos marcados -->
   <section class="about" id="sobre" aria-labelledby="sobre-t">
     <div class="wrap">
-      <article class="letter" data-rise>
-        <h2 id="sobre-t" class="h-lead">Sobre mim</h2>
-        <p>Comecei na TI pelo suporte. Atendendo cerca de 600 pessoas em três unidades, aprendi como um sistema se comporta na mão de quem usa e o que acontece quando ele falha.</p>
-        <p>Hoje trabalho com desenvolvimento, dados e automação no varejo. Gosto de pegar um problema que vive em planilhas e conversas e transformar em um sistema pequeno, seguro e testado, que outra pessoa consegue manter.</p>
-        <p>Minha parte costuma ir do banco à tela: modelar tabelas e regras de acesso, escrever a função que entrega os dados, montar a interface e publicar com testes automáticos.</p>
-        <p>Estou cursando Tecnologia em Sistemas para Internet no IFSul e procuro uma vaga full stack em que eu possa crescer junto com um time.</p>
-        <p class="sign">Pedro Rodrigues da Cunha</p>
-        <p class="sign-role">Desenvolvedor full stack, Charqueadas, RS</p>
-      </article>
-      <div class="tear" data-rise>
-        <a href="mailto:pedro.dacunha02@gmail.com">pedro.dacunha02@gmail.com</a>
-        <a class="btn" href="https://www.linkedin.com/in/pedrorodrigues2" rel="noopener">Ver o LinkedIn</a>
+      <h2 id="sobre-t" class="sr">Sobre mim</h2>
+      <div class="about-text" data-rise>
+        <p><b class="name">Pedro Rodrigues da Cunha</b> é desenvolvedor full stack com experiência na construção de sistemas web, plataformas promocionais e ferramentas internas utilizadas no <mark class="hl-1">varejo</mark>. Atua com <mark class="hl-2">TypeScript, React, MySQL, PostgreSQL/Supabase e Python</mark>, incluindo integrações, segurança, testes automatizados e publicação de aplicações.</p>
+        <p>Comecei na TI pelo suporte. Atendendo cerca de <mark class="hl-3">600 pessoas em três unidades</mark>, aprendi como um sistema se comporta na mão de quem usa e o que acontece quando ele falha. Hoje trabalho com desenvolvimento, dados e automação no <mark class="hl-1">Grupo Lebes</mark>, e gosto de pegar um problema que vive em planilhas e conversas e transformar em um sistema pequeno, seguro e testado, que outra pessoa consegue manter.</p>
+        <p>Minha parte costuma ir do banco à tela: modelar tabelas e regras de acesso, escrever a função que entrega os dados, montar a interface e publicar com testes automáticos. Estou cursando <mark class="hl-2">Tecnologia em Sistemas para Internet no IFSul</mark>, moro em <mark class="hl-3">Charqueadas, RS</mark>, e procuro uma vaga full stack em que eu possa crescer junto com um time. <a class="hl-cta" href="#contato">Vamos conversar?</a></p>
       </div>
+      <p class="sign" data-rise>Pedro Rodrigues da Cunha, desenvolvedor full stack</p>
     </div>
   </section>
 
@@ -402,7 +464,7 @@ using (regional = any (regionais_do_usuario()));</code></pre>
     <div class="wrap contact-in">
       <div class="card" data-rise>
         <h2 id="contato-t" class="h-lead">Fale comigo</h2>
-        <p>Moro em Charqueadas, na região metropolitana de Porto Alegre. Para vagas e projetos, o caminho mais rápido é o e-mail.</p>
+        <p>Moro em Charqueadas, na região metropolitana de Porto Alegre. Para vagas e projetos, o caminho mais rápido é o e-mail. Respondo por e-mail ou pelo LinkedIn.</p>
         <ul class="card-rows">
           <li><span>E-mail</span><a href="mailto:pedro.dacunha02@gmail.com">pedro.dacunha02@gmail.com</a></li>
           <li><span>LinkedIn</span><a href="https://www.linkedin.com/in/pedrorodrigues2" rel="noopener">pedrorodrigues2</a></li>
@@ -414,22 +476,19 @@ using (regional = any (regionais_do_usuario()));</code></pre>
   </section>
 </main>
 
-<!-- Rodapé: o verso do cupom -->
+<!-- Rodapé: o e-mail é o título -->
 <footer class="back">
-  <div class="wrap">
-    <div class="back-card">
-      <div class="back-msg">
-        <p class="back-title">Obrigado pela leitura.</p>
-        <p>Se o seu time precisa de alguém que cuide do banco de dados à tela, escreva. Os códigos e estudos de caso estão no GitHub.</p>
-      </div>
-      <div class="back-addr">
-        <img class="stamp" src="assets/charqueadas.jpg" width="1600" height="1060" alt="" loading="lazy">
-        <a href="mailto:pedro.dacunha02@gmail.com">pedro.dacunha02@gmail.com</a>
-        <a href="https://www.linkedin.com/in/pedrorodrigues2" rel="noopener">linkedin.com/in/pedrorodrigues2</a>
-        <a href="https://github.com/rodriguespedro22" rel="noopener">github.com/rodriguespedro22</a>
-        <span>Charqueadas, RS, Brasil</span>
-      </div>
-      <p class="imprint">2026, Pedro Rodrigues da Cunha. Foto de Charqueadas: “Charqueadas vista aerea”, de Richardsmenezes, <a href="https://creativecommons.org/licenses/by-sa/3.0/" rel="noopener">CC BY-SA 3.0</a>, via <a href="https://commons.wikimedia.org/wiki/File:Charqueadas_vista_aerea.jpg" rel="noopener">Wikimedia Commons</a>.</p>
+  <div class="wrap back-in">
+    <div class="back-top">
+      <p>Pedro Cunha, desenvolvedor full stack. Charqueadas, RS, Brasil.</p>
+      <p>Se o seu time precisa de alguém que cuide do banco de dados à tela, escreva. Os códigos e estudos de caso estão no GitHub.</p>
+      <a class="tlink" href="#topo">Voltar ao topo</a>
+    </div>
+    <a class="back-mail" href="mailto:pedro.dacunha02@gmail.com"><span class="line"><span class="li">pedro.dacunha02</span></span><span class="line"><span class="li">@gmail.com</span></span></a>
+    <div class="back-meta">
+      <p><a href="https://www.linkedin.com/in/pedrorodrigues2" rel="noopener">LinkedIn</a> <a href="https://github.com/rodriguespedro22" rel="noopener">GitHub</a></p>
+      <p class="imprint">Foto de Charqueadas: “Charqueadas vista aerea”, de Richardsmenezes, <a href="https://creativecommons.org/licenses/by-sa/3.0/" rel="noopener">CC BY-SA 3.0</a>, via <a href="https://commons.wikimedia.org/wiki/File:Charqueadas_vista_aerea.jpg" rel="noopener">Wikimedia Commons</a>.</p>
+      <p>Charqueadas, 2026</p>
     </div>
   </div>
 </footer>
@@ -437,7 +496,7 @@ using (regional = any (regionais_do_usuario()));</code></pre>
 <script src="lib/gsap.min.js"></script>
 <script src="lib/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
-<script src="app.js?v=17"></script>
-<script type="module" src="cena3d.js?v=17"></script>
+<script src="app.js?v=20"></script>
+<script type="module" src="cena3d.js?v=20"></script>
 </body>
 </html>

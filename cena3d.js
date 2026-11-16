@@ -37,7 +37,7 @@ function iniciar() {
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   hero.prepend(canvas);
 
-  const fundo = new THREE.Color('#050f16');
+  const fundo = new THREE.Color('#070c12');
   const scene = new THREE.Scene();
   scene.background = fundo;
   scene.fog = new THREE.Fog(fundo, 9, 24);
@@ -45,7 +45,7 @@ function iniciar() {
   const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 60);
   camera.position.set(0, 0.25, 10);
 
-  scene.add(new THREE.HemisphereLight('#ffd9bf', '#050f16', 0.7));
+  scene.add(new THREE.HemisphereLight('#ffd9bf', '#070c12', 0.7));
   const chave = new THREE.DirectionalLight('#ffffff', 1.4);
   chave.position.set(3, 4, 6);
   scene.add(chave);
@@ -129,8 +129,13 @@ function iniciar() {
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
-    tv.scale.setScalar(camera.aspect < 1 ? 0.62 : camera.aspect < 1.3 ? 0.8 : 1);
+    tv.scale.setScalar(camera.aspect < 1 ? 0.5 : camera.aspect < 1.3 ? 0.8 : 1);
+    // Em telas largas a sala fica à direita, para o nome ocupar o lado escuro.
+    ladoX = camera.aspect < 1 ? 0 : camera.aspect < 1.3 ? 1.2 : 2.6;
+    // Em pé (celular), a TV fica entre o nome e o texto do rodapé do topo.
+    ladoY = camera.aspect < 1 ? -0.15 : 0;
   };
+  let ladoX = 0, ladoY = 0;
   medir();
   new ResizeObserver(medir).observe(canvas);
 
@@ -153,6 +158,9 @@ function iniciar() {
     atual.y += (alvo.y - atual.y) * 0.05;
     mundo.rotation.y = atual.x * 0.35;
     mundo.rotation.x = atual.y * 0.14;
+    // Ao rolar, a sala volta ao centro e a câmera entra na tela.
+    mundo.position.x = ladoX * (1 - q) + atual.x * -0.4;
+    mundo.position.y = ladoY * (1 - q) + atual.y * 0.3;
 
     // Rolagem: a câmera entra na tela, a TV encara a câmera e os cupons se espalham.
     const fim = camera.aspect < 1 ? 7.2 : 4.3;

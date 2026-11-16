@@ -1,4 +1,4 @@
-// Comportamento do portfólio: barra, história do painel, simulação de RLS, entradas e cenas de rolagem.
+// Comportamento do portfólio: barra, cursor, história do painel, simulação de RLS, trilho de projetos e cenas de rolagem.
 (function () {
   'use strict';
 
@@ -7,9 +7,10 @@
   var forcar = /[?&]movimento=1\b/.test(location.search);
   var reduce = forcar ? { matches: false } : window.matchMedia('(prefers-reduced-motion: reduce)');
   var hasGsap = !!(window.gsap && window.ScrollTrigger);
+  var mouseFino = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
   if (!reduce.matches) root.classList.add('motion');
 
-  // Barra fixa: aparece depois que o cupom do topo sai de vista.
+  // Barra fixa: aparece depois que o topo sai de vista.
   var bar = document.getElementById('bar');
   var hero = document.getElementById('topo');
   if (bar && hero && 'IntersectionObserver' in window) {
@@ -18,6 +19,18 @@
     }, { threshold: 0.15 }).observe(hero);
   } else if (bar) {
     bar.classList.add('on');
+  }
+
+  // Barra de progresso: só quando o navegador não tem animation-timeline.
+  var progresso = document.getElementById('progresso');
+  if (progresso && !(window.CSS && CSS.supports && CSS.supports('animation-timeline: scroll()'))) {
+    var medirProgresso = function () {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      progresso.style.setProperty('--p', max > 0 ? (window.scrollY / max).toFixed(4) : 0);
+    };
+    window.addEventListener('scroll', medirProgresso, { passive: true });
+    window.addEventListener('resize', medirProgresso);
+    medirProgresso();
   }
 
   // História presa: cada passo troca a tela da TV.
@@ -70,7 +83,7 @@
   }
 
   // Entradas: título, texto e imagem de cada bloco sobem em sequência, uma vez.
-  var blocks = document.querySelectorAll('[data-rise]');
+  var blocks = document.querySelectorAll('[data-rise], [data-float]');
   if (!reduce.matches && 'IntersectionObserver' in window) {
     blocks.forEach(function (b) {
       if (!b.children.length) b.classList.add('solo');
@@ -85,7 +98,6 @@
   } else {
     blocks.forEach(function (b) { b.classList.add('in'); });
   }
-
   // Velocidade da rolagem, compartilhada pelo campo de pontos e pela faixa.
   var rolagem = { y: window.scrollY, v: 0, dir: 1 };
   var medirRolagem = function () {
@@ -95,14 +107,15 @@
     rolagem.v = rolagem.v * 0.88 + d * 0.12;
   };
 
-  // Campo de pontos atrás das áreas laranja: ondula com a rolagem e abre caminho para o cursor.
+  // Campo de pontos atrás das áreas escuras: ondula com a rolagem e abre caminho para o cursor.
   var campo = document.getElementById('campo');
   if (campo && campo.getContext) {
     var cx = campo.getContext('2d');
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
     var W = 0, H = 0, gap = 30;
     var cursor = { x: -9999, y: -9999, k: 0 };
-    var tinta = getComputedStyle(root).getPropertyValue('--ink').trim() || '#050f16';
+    var tinta = getComputedStyle(root).getPropertyValue('--ink').trim() || '#f3efe8';
+    var laranja = getComputedStyle(root).getPropertyValue('--accent').trim() || '#ff7a1f';
     var medir = function () {
       W = window.innerWidth; H = window.innerHeight;
       campo.width = Math.round(W * dpr); campo.height = Math.round(H * dpr);
@@ -114,8 +127,8 @@
       cx.fillStyle = tinta;
       var desloc = (window.scrollY * 0.35) % gap;
       var amp = 1.6 + Math.min(Math.abs(rolagem.v), 60) * 0.18;
-      var R = 160, perto = [];
-      cx.globalAlpha = 0.24;
+      var R = 170, perto = [];
+      cx.globalAlpha = 0.16;
       cx.beginPath();
       for (var y = -gap; y < H + gap; y += gap) {
         var py = y - desloc;
@@ -125,19 +138,20 @@
           var dx = x - cursor.x, dy = py - cursor.y;
           var d = Math.sqrt(dx * dx + dy * dy);
           if (d < R) { perto.push([x, py + onda, dx, dy, d]); continue; }
-          cx.moveTo(x + 1.7, py + onda);
-          cx.arc(x, py + onda, 1.7, 0, 6.2832);
+          cx.moveTo(x + 1.5, py + onda);
+          cx.arc(x, py + onda, 1.5, 0, 6.2832);
         }
       }
       cx.fill();
-      // Pontos perto do cursor: são empurrados para fora e crescem.
+      // Pontos perto do cursor: são empurrados para fora, crescem e acendem em laranja.
+      cx.fillStyle = laranja;
       for (var i = 0; i < perto.length; i++) {
-        var p = perto[i], k = (1 - p[4] / R) * cursor.k, empurra = k * k * 26;
+        var p = perto[i], k = (1 - p[4] / R) * cursor.k, empurra = k * k * 28;
         var nx = p[0] + (p[4] ? p[2] / p[4] * empurra : 0);
         var ny = p[1] + (p[4] ? p[3] / p[4] * empurra : 0);
-        cx.globalAlpha = 0.24 + k * 0.5;
+        cx.globalAlpha = 0.16 + k * 0.7;
         cx.beginPath();
-        cx.arc(nx, ny, 1.7 + k * 2.8, 0, 6.2832);
+        cx.arc(nx, ny, 1.5 + k * 2.6, 0, 6.2832);
         cx.fill();
       }
       cx.globalAlpha = 1;
@@ -160,7 +174,7 @@
       var quadro = function (t) {
         medirRolagem();
         cursor.k += ((cursor.x > -9000 ? 1 : 0) - cursor.k) * 0.08;
-        pintar(t);
+        if (!document.hidden) pintar(t);
         requestAnimationFrame(quadro);
       };
       requestAnimationFrame(quadro);
@@ -219,15 +233,14 @@
     }
   });
 
-  // Relógio de Charqueadas na barra.  var relogio = document.getElementById('relogio');
+  // Relógio de Charqueadas na barra.
+  var relogio = document.getElementById('relogio');
   if (relogio && window.Intl) {
     var hora = new Intl.DateTimeFormat('pt-BR', { timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit' });
     var tic = function () { relogio.textContent = 'Charqueadas, ' + hora.format(new Date()); };
     tic();
     setInterval(tic, 15000);
   }
-
-  var mouseFino = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
   // Links da barra "decodificam" ao passar o mouse.
   var simbolos = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789%$#';
@@ -246,14 +259,39 @@
     requestAnimationFrame(passo);
   };
   if (!reduce.matches && mouseFino) {
-    document.querySelectorAll('.bar nav a:not(.btn), .wordmark, .ticket-foot .tlink').forEach(function (a) {
+    document.querySelectorAll('.bar nav a:not(.btn), .wordmark, .hero-links .tlink').forEach(function (a) {
       a.addEventListener('mouseenter', function () { decodificar(a); });
     });
   }
 
   if (!reduce.matches && mouseFino) {
+    // Cursor próprio: um ponto no lugar da seta e um anel que vem atrás e cresce sobre links.
+    var cursorEl = document.getElementById('cursor');
+    if (cursorEl) {
+      root.classList.add('cursor-on');
+      var dot = cursorEl.querySelector('.cursor-dot'), ring = cursorEl.querySelector('.cursor-ring');
+      var mira = { x: -100, y: -100 }, anel = { x: -100, y: -100 }, ativo = false;
+      var seguir = function () {
+        anel.x += (mira.x - anel.x) * 0.18;
+        anel.y += (mira.y - anel.y) * 0.18;
+        ring.style.transform = 'translate3d(' + anel.x.toFixed(1) + 'px,' + anel.y.toFixed(1) + 'px,0)';
+        if (Math.abs(mira.x - anel.x) > 0.1 || Math.abs(mira.y - anel.y) > 0.1) requestAnimationFrame(seguir); else ativo = false;
+      };
+      window.addEventListener('pointermove', function (e) {
+        if (e.pointerType !== 'mouse') return;
+        mira.x = e.clientX; mira.y = e.clientY;
+        dot.style.transform = 'translate3d(' + mira.x + 'px,' + mira.y + 'px,0)';
+        if (!ativo) { ativo = true; requestAnimationFrame(seguir); }
+        cursorEl.classList.toggle('is-link', !!(e.target.closest && e.target.closest('a, button, label, [data-tilt]')));
+      }, { passive: true });
+      window.addEventListener('pointerdown', function () { cursorEl.classList.add('is-down'); });
+      window.addEventListener('pointerup', function () { cursorEl.classList.remove('is-down'); });
+      document.addEventListener('mouseout', function (e) { if (!e.relatedTarget) cursorEl.style.opacity = 0; });
+      document.addEventListener('mouseover', function () { cursorEl.style.opacity = 1; });
+    }
+
     // Luz que acompanha o cursor nas faixas escuras.
-    document.querySelectorAll('.f-ink, .back').forEach(function (el) {
+    document.querySelectorAll('.work, .ledger, .about, .p-ink').forEach(function (el) {
       el.addEventListener('pointermove', function (e) {
         var r = el.getBoundingClientRect();
         el.style.setProperty('--mx', (e.clientX - r.left) + 'px');
@@ -262,17 +300,37 @@
       el.addEventListener('pointerleave', function () { el.style.setProperty('--mx', '-999px'); });
     });
 
+    // O nome do topo acompanha o cursor de leve, em paralaxe.
+    var heroMain = document.querySelector('[data-parallax]');
+    if (heroMain) {
+      var pAlvo = { x: 0, y: 0 }, pAtual = { x: 0, y: 0 }, pRodando = false;
+      var mover = function () {
+        pAtual.x += (pAlvo.x - pAtual.x) * 0.06;
+        pAtual.y += (pAlvo.y - pAtual.y) * 0.06;
+        heroMain.style.setProperty('--px', pAtual.x.toFixed(2) + 'px');
+        heroMain.style.setProperty('--py', pAtual.y.toFixed(2) + 'px');
+        heroMain.style.translate = pAtual.x.toFixed(2) + 'px ' + pAtual.y.toFixed(2) + 'px';
+        if (Math.abs(pAlvo.x - pAtual.x) > 0.05 || Math.abs(pAlvo.y - pAtual.y) > 0.05) requestAnimationFrame(mover); else pRodando = false;
+      };
+      window.addEventListener('pointermove', function (e) {
+        if (e.pointerType !== 'mouse' || window.scrollY > window.innerHeight) return;
+        pAlvo.x = (e.clientX / window.innerWidth - 0.5) * -28;
+        pAlvo.y = (e.clientY / window.innerHeight - 0.5) * -18;
+        if (!pRodando) { pRodando = true; requestAnimationFrame(mover); }
+      }, { passive: true });
+    }
+
     // Imagens e telas inclinam na direção do cursor.
     document.querySelectorAll('[data-tilt]').forEach(function (el) {
       var alvo = { x: 0, y: 0 }, atual = { x: 0, y: 0 }, rodando = false;
-      var mover = function () {
+      var girar = function () {
         atual.x += (alvo.x - atual.x) * 0.12;
         atual.y += (alvo.y - atual.y) * 0.12;
         el.style.transform = 'perspective(1100px) rotateX(' + atual.y.toFixed(2) + 'deg) rotateY(' + atual.x.toFixed(2) + 'deg)';
-        if (Math.abs(alvo.x - atual.x) > 0.02 || Math.abs(alvo.y - atual.y) > 0.02) requestAnimationFrame(mover);
+        if (Math.abs(alvo.x - atual.x) > 0.02 || Math.abs(alvo.y - atual.y) > 0.02) requestAnimationFrame(girar);
         else rodando = false;
       };
-      var ligar = function () { if (!rodando) { rodando = true; requestAnimationFrame(mover); } };
+      var ligar = function () { if (!rodando) { rodando = true; requestAnimationFrame(girar); } };
       el.addEventListener('pointermove', function (e) {
         var r = el.getBoundingClientRect();
         alvo.x = ((e.clientX - r.left) / r.width - 0.5) * 10;
@@ -307,39 +365,42 @@
     lenis.on('scroll', ScrollTrigger.update);
     gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
     gsap.ticker.lagSmoothing(0);
-    document.querySelectorAll('a[href^="#"]').forEach(function (a) {
-      a.addEventListener('click', function (e) {
-        // Ctrl/Cmd/Shift-clique e botão do meio seguem o comportamento normal do navegador.
-        if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-        var id = a.getAttribute('href');
-        var alvo = id.length > 1 && document.querySelector(id);
-        if (!alvo) return;
-        e.preventDefault();
-        lenis.scrollTo(alvo, { offset: id === '#topo' ? 0 : -64 });
-        history.replaceState(null, '', id);
-        alvo.setAttribute('tabindex', '-1');
-        alvo.focus({ preventScroll: true });
-      });
-    });
   }
+  // Âncoras: rolagem suave até a seção; dentro do trilho horizontal, até a posição que mostra o painel.
+  var alvoDoTrilho = null; // função definida na cena do trilho
+  document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      // Ctrl/Cmd/Shift-clique e botão do meio seguem o comportamento normal do navegador.
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      var id = a.getAttribute('href');
+      var alvo = id.length > 1 && document.querySelector(id);
+      if (!alvo) return;
+      e.preventDefault();
+      var destino = (alvoDoTrilho && alvoDoTrilho(alvo));
+      if (destino === null || destino === undefined) destino = alvo;
+      var desloc = id === '#topo' ? 0 : -64;
+      if (lenis) lenis.scrollTo(destino, { offset: typeof destino === 'number' ? 0 : desloc });
+      else window.scrollTo({ top: typeof destino === 'number' ? destino : alvo.getBoundingClientRect().top + window.scrollY + desloc, behavior: 'smooth' });
+      history.replaceState(null, '', id);
+      alvo.setAttribute('tabindex', '-1');
+      alvo.focus({ preventScroll: true });
+    });
+  });
 
   var mm = gsap.matchMedia();
 
-  mm.add({ desktop: '(min-width: 900px)', phone: '(max-width: 899px)' }, function (ctx) {
+  mm.add({ desktop: '(min-width: 900px)', phone: '(max-width: 899px)', trilho: '(min-width: 1024px) and (min-height: 560px)' }, function (ctx) {
     var desktop = ctx.conditions.desktop;
+    var trilho = ctx.conditions.trilho;
 
-    // 1. Rasgar o cupom: o canhoto se solta pela linha picotada, o cupom sai e a sala acende.
-    var rasgo = gsap.timeline({
-      scrollTrigger: { trigger: '.hero', start: 'top top', end: desktop ? '+=120%' : '+=80%', scrub: 0.8, pin: true, anticipatePin: 1, onUpdate: function (s) { window.__heroP = s.progress; } }
+    // 1. Topo: enquanto sai de cena, o nome recua e some e a câmera da cena 3D entra na tela (progresso em window.__heroP).
+    var topo = gsap.timeline({
+      scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 0.6, onUpdate: function (s) { window.__heroP = s.progress; } }
     });
-    rasgo
-      .to('.ticket-stub', desktop
-        ? { rotation: 16, xPercent: 45, yPercent: 120, transformOrigin: '0% 0%', ease: 'power2.in', duration: 1 }
-        : { rotation: -9, yPercent: 160, transformOrigin: '0% 0%', ease: 'power2.in', duration: 1 }, 0)
-      .to('.ticket-stub', { autoAlpha: 0, duration: 0.35 }, 0.65)
-      .to('.ticket-main', { yPercent: -22, scale: 0.84, autoAlpha: 0, ease: 'power1.in', duration: 1 }, 0.35)
-      .to('.hero-shade', { opacity: 0.12, ease: 'none', duration: 1.1 }, 0.2)
-      .fromTo('.hero-bg', { scale: 1.16 }, { scale: 1, ease: 'none', duration: 1.4 }, 0);
+    topo
+      .to('.hero-main', { yPercent: 35, scale: 0.9, autoAlpha: 0, ease: 'power1.in', duration: 1 }, 0)
+      .to('.hero-foot', { autoAlpha: 0, y: 40, ease: 'power1.in', duration: 0.5 }, 0.1)
+      .fromTo('.hero-bg', { scale: 1.16 }, { scale: 1, ease: 'none', duration: 1 }, 0);
 
     // 2. A TV se endireita e chega para perto; a barra mostra em qual passo a história está.
     gsap.fromTo('.tv',
@@ -374,50 +435,59 @@
       gsap.from(etapas, { y: 40, opacity: 0, stagger: 0.08, duration: 0.7, ease: 'power3.out', scrollTrigger: { trigger: '.flow', start: 'top 85%', once: true } });
     }
 
-    // 4. Pastas: cada projeto é arquivado por cima do anterior, que recua e escurece.
-    var pastas = gsap.utils.toArray('.folder');
-    pastas.forEach(function (f, i) {
-      f.style.zIndex = i + 1;
-      var prox = pastas[i + 1];
-      if (!prox) return;
-      var tampa = { trigger: prox, start: 'top bottom', end: 'top 116px', scrub: true };
-      if (desktop) {
-        ScrollTrigger.create({
-          trigger: f,
-          start: function () { return f.offsetHeight > window.innerHeight - 116 ? 'bottom bottom' : 'top 116px'; },
-          endTrigger: prox, end: 'top 116px',
-          pin: true, pinSpacing: false
-        });
-        gsap.timeline({ scrollTrigger: Object.assign({}, tampa) })
-          .to(f.querySelector('.folder-in'), { scale: 0.92, y: -24, ease: 'none', duration: 1 }, 0)
-          .to(f.querySelector('.folder-in'), { autoAlpha: 0, ease: 'none', duration: 0.25 }, 0.75);
-      }
-      gsap.to(f.querySelector('.folder-dim'), { opacity: desktop ? 0.55 : 0.25, ease: 'none', scrollTrigger: Object.assign({}, tampa) });
-    });
-    // As imagens dentro das pastas andam em ritmo próprio.
-    gsap.utils.toArray('.pair img').forEach(function (img, i) {
-      gsap.fromTo(img, { y: i ? 80 : 20 }, { y: i ? -40 : -20, ease: 'none', scrollTrigger: { trigger: img, start: 'top bottom', end: 'bottom top', scrub: true } });
-    });
-    gsap.fromTo('.slip', { rotation: -5, y: 40 }, { rotation: 1, y: -20, ease: 'none', scrollTrigger: { trigger: '.slip', start: 'top bottom', end: 'bottom top', scrub: true } });
+    // 4. Trilho de projetos: preso à tela, a rolagem vertical vira deslocamento lateral.
+    var rail = document.getElementById('rail');
+    var track = document.getElementById('track');
+    var paineis = gsap.utils.toArray('.panel');
+    if (trilho && rail && track && paineis.length > 1) {
+      root.classList.add('rail-h');
+      var distancia = function () { return track.scrollWidth - window.innerWidth; };
+      var corrida = gsap.to(track, {
+        x: function () { return -distancia(); },
+        ease: 'none',
+        scrollTrigger: {
+          trigger: rail, start: 'top top', end: function () { return '+=' + Math.round(distancia() * 0.75); },
+          pin: true, scrub: 0.6, anticipatePin: 1, invalidateOnRefresh: true
+        }
+      });
+      // Dentro de cada painel, a figura anda em ritmo próprio e o título entra do lado.
+      paineis.forEach(function (p) {
+        var fig = p.querySelector('[data-float]');
+        if (fig) gsap.fromTo(fig, { xPercent: 7 }, { xPercent: -4, ease: 'none', scrollTrigger: { trigger: p, containerAnimation: corrida, start: 'left right', end: 'right left', scrub: true } });
+        var t = p.querySelector('.panel-t');
+        if (t) gsap.fromTo(t, { xPercent: 12, opacity: 0 }, { xPercent: 0, opacity: 1, ease: 'power2.out', duration: 0.6, scrollTrigger: { trigger: p, containerAnimation: corrida, start: 'left 70%', toggleActions: 'play none none reverse' } });
+      });
+      // Âncora para um painel: a posição vertical em que ele fica inteiro na tela.
+      alvoDoTrilho = function (el) {
+        var p = el.closest && el.closest('.panel');
+        if (!p) return null;
+        var st = corrida.scrollTrigger;
+        var i = paineis.indexOf(p);
+        if (i < 0) return null;
+        var fracao = p.offsetLeft / Math.max(1, distancia());
+        return st.start + Math.min(1, fracao) * (st.end - st.start);
+      };
+    } else {
+      alvoDoTrilho = null;
+      paineis.forEach(function (p) {
+        var fig = p.querySelector('[data-float]');
+        if (fig && desktop) gsap.fromTo(fig, { y: 60 }, { y: -40, ease: 'none', scrollTrigger: { trigger: p, start: 'top bottom', end: 'bottom top', scrub: true } });
+      });
+    }
 
-    // 5. Canhotos da trajetória: saem de um maço e se espalham na fileira.
-    var canhotos = gsap.utils.toArray('.stubs .stub');
-    if (desktop) {
-      gsap.fromTo(canhotos,
-        { xPercent: function (i) { return -i * 104; }, rotation: function (i) { return -4 + i * 4; }, y: function (i) { return i * 10; } },
-        { xPercent: 0, rotation: 0, y: 0, ease: 'power1.out', scrollTrigger: { trigger: '.stubs', start: 'top 85%', end: 'top 35%', scrub: 0.6 } });
+    // 5. Trajetória: a linha se desenha com a rolagem.
+    var linha = document.querySelector('.rail-line b');
+    if (linha) {
+      gsap.fromTo(linha, { scaleY: 0 }, { scaleY: 1, ease: 'none', scrollTrigger: { trigger: '.timeline', start: 'top 70%', end: 'bottom 70%', scrub: 0.4 } });
     }
 
     // 6. Charqueadas: a foto aérea recua enquanto o cartão de contato chega.
     gsap.fromTo('.contact-bg', { scale: 1.3 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: '.contact', start: 'top bottom', end: desktop ? 'bottom bottom' : 'center center', scrub: true } });
 
-    // 7. Verso do cupom: o cartão vira de leve ao chegar.
-    if (desktop) gsap.fromTo('.back-card', { rotateX: -24, y: 80, transformPerspective: 1200, transformOrigin: '50% 100%' },
-      { rotateX: 0, y: 0, ease: 'none', scrollTrigger: { trigger: '.back', start: 'top bottom', end: 'top 40%', scrub: 0.6 } });
+    // 7. Rodapé: o e-mail sobe de trás da linha de base.
+    gsap.from('.back-mail .li', { yPercent: 110, duration: 1, ease: 'expo.out', stagger: 0.11, scrollTrigger: { trigger: '.back-mail', start: 'top 85%', once: true } });
 
-    return function () {
-      etapas.forEach(function (li, j) { li.classList.toggle('is-at', j === 0); });
-    };
+    return function () { root.classList.remove('rail-h'); };
   });
 
   // Títulos (criados depois das cenas presas, para medir já com o espaço dos pins): cada palavra sobe da sua própria máscara. O texto inteiro fica no aria-label.
@@ -430,7 +500,7 @@
     }).join(' ');
     return el.querySelectorAll('.wi');
   };
-  document.querySelectorAll('.h-head, .back-title').forEach(function (el) {
+  document.querySelectorAll('.h-head:not(.panel-t), .ledger-t span').forEach(function (el) {
     var palavras = dividir(el);
     if (el.parentElement && el.parentElement.hasAttribute('data-rise')) {
       el.style.opacity = 1; el.style.transform = 'none'; el.style.transition = 'none';
@@ -441,57 +511,32 @@
     });
   });
 
-  // Entrada: a sala acende, o cupom sobe e o canhoto é carimbado.
-  gsap.timeline({ defaults: { ease: 'expo.out' } })
-    .from('.hero-bg', { autoAlpha: 0, duration: 1.2, ease: 'power2.out' }, 0)
-    .from('.ticket', { y: 140, rotation: -3, autoAlpha: 0, duration: 1.2 }, 0.1)
-    .from('.ticket-name span', { yPercent: 60, autoAlpha: 0, duration: 1, stagger: 0.08 }, 0.35)
-    .from('.ticket-stub > *', { scale: 1.25, autoAlpha: 0, duration: 0.5, stagger: 0.07, ease: 'back.out(2.2)' }, 0.75);
-
-  // Cargo que rola como caça-níquel.
-  var roll = document.querySelector('.roll');
-  if (roll) {
-    var palavras = roll.getAttribute('data-words').split('|');
-    var idx = 0;
-    roll.innerHTML = '<span>' + palavras[0] + '</span>';
-    var trocar = function () {
-      idx = (idx + 1) % palavras.length;
-      var velha = roll.firstElementChild;
-      var nova = document.createElement('span');
-      nova.textContent = palavras[idx];
-      nova.style.position = 'absolute'; nova.style.left = '0'; nova.style.top = '0';
-      roll.appendChild(nova);
-      var largura = nova.offsetWidth;
-      gsap.timeline({ onComplete: function () { velha.remove(); nova.style.position = ''; roll.style.width = ''; } })
-        .to(roll, { width: largura, duration: 0.6, ease: 'power3.inOut' }, 0)
-        .to(velha, { yPercent: -110, duration: 0.6, ease: 'power3.in' }, 0)
-        .fromTo(nova, { yPercent: 110 }, { yPercent: 0, duration: 0.7, ease: 'power3.out' }, 0.25);
-    };
-    roll.style.width = roll.firstElementChild.offsetWidth + 'px';
-    roll.style.width = '';
-    // Duas voltas completas e para em "full stack": movimento automático não fica rodando para sempre.
-    var trocas = 0;
-    var ciclo = setInterval(function () {
-      if (document.hidden || window.scrollY > window.innerHeight) return;
-      trocar();
-      if (++trocas >= palavras.length * 2) clearInterval(ciclo);
-    }, 2600);
+  // Os nomes dos projetos aparecem um a um.
+  var nomes = document.querySelectorAll('.names > *');
+  if (nomes.length) {
+    gsap.from(nomes, { y: 30, opacity: 0, duration: 0.9, ease: 'expo.out', stagger: 0.1, scrollTrigger: { trigger: '.names', start: 'top 85%', once: true } });
   }
 
-  // Números em odômetro: cada dígito gira até o valor quando aparece.
+  // Entrada: o nome sobe de trás da linha de base, depois o resto acende.
+  gsap.timeline({ defaults: { ease: 'expo.out' } })
+    .from('.hero-name .li', { yPercent: 110, duration: 1.1, stagger: 0.11 }, 0.1)
+    .from('.hero-role', { y: 24, autoAlpha: 0, duration: 0.8 }, 0.7)
+    .from('.hero-foot > *', { y: 24, autoAlpha: 0, duration: 0.8, stagger: 0.1 }, 0.9);
+
+  // Contadores: o número sobe até o valor quando aparece. A largura fica reservada para a página não pular.
   document.querySelectorAll('.odo').forEach(function (el) {
     var alvo = el.getAttribute('data-n');
-    el.innerHTML = '<span class="sr">' + alvo + '</span>' + alvo.split('').map(function () {
-      var col = '<span class="col" aria-hidden="true">';
-      for (var n = 0; n <= 9; n++) col += '<span>' + n + '</span>';
-      return col + '</span>';
-    }).join('');
-    var cols = el.querySelectorAll('.col');
-    alvo.split('').forEach(function (dig, i) {
-      gsap.fromTo(cols[i], { yPercent: 0 }, {
-        yPercent: -Number(dig) * 10, duration: 1.6 + i * 0.25, ease: 'expo.out',
-        scrollTrigger: { trigger: el, start: 'top 90%', once: true, refreshPriority: -1 }
-      });
+    var fim = Number(alvo.replace(/\D/g, ''));
+    var milhar = alvo.indexOf('.') !== -1;
+    var formatar = function (v) { v = Math.round(v); return milhar ? v.toLocaleString('pt-BR') : String(v); };
+    el.style.setProperty('--w', alvo.length + 'ch');
+    el.setAttribute('aria-label', alvo);
+    var obj = { v: 0 };
+    el.textContent = formatar(0);
+    gsap.to(obj, {
+      v: fim, duration: 1.8, ease: 'expo.out',
+      onUpdate: function () { el.textContent = formatar(obj.v); },
+      scrollTrigger: { trigger: el, start: 'top 90%', once: true, refreshPriority: -1 }
     });
   });
 
