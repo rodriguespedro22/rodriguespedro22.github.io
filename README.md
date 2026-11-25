@@ -25,12 +25,3 @@ GSAP 3.12.5 com ScrollTrigger (em `lib/`) e Lenis 1.1.13 (CDN, só com mouse ou 
 7. Fundo: campo de pontos (`<canvas id="campo">`) atrás das áreas escuras, que ondula com a rolagem e abre caminho para o cursor, acendendo em laranja.
 8. Interações: relógio de Charqueadas, links que decodificam, botões magnéticos, telas e vídeos que inclinam, luz do cursor nas faixas escuras. Só com mouse.
 9. Faixa de nomes (`.ribbon`): stack e projetos correndo de lado; acelera, inclina e troca de sentido com a rolagem.
-
-Com "reduzir movimento" ligado no sistema, as cenas não rodam, os vídeos ficam no pôster e a página fica estática e completa. Para testar mesmo assim, abra com `?movimento=1`.
-
-## Publicação
-
-No ar em https://rodriguespedro22.github.io/ (GitHub Pages, branch `main`, pasta raiz).
-
-- A foto de Charqueadas exige crédito (já está no rodapé) e, se for alterada, a versão alterada deve sair sob a mesma licença.
-- O site não tem telefone nem currículo em PDF de propósito.
