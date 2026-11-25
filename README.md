@@ -1,6 +1,4 @@
-# Portfólio de Pedro Cunha
-
-Site estático de uma página (HTML, CSS e JavaScript, sem etapa de build). A ideia visual: a tela da diretoria vira o palco. O topo é só tipografia sobre uma sala escura em 3D onde a TV do painel toca a demonstração real; o resto da página é um ambiente escuro com uma cor só (laranja), campos claros para os estudos de caso e um trilho horizontal de projetos.
+# Portfólio Pedro Rodrigues da Cunha
 
 ## Arquivos
 
@@ -13,14 +11,6 @@ Site estático de uma página (HTML, CSS e JavaScript, sem etapa de build). A id
 | `img/` | Telas do painel (modo demonstração, dados fictícios) |
 | `video/` | Gravações de tela (WebM) e pôsteres: demonstração do painel, 30 pra Show e Olha o Mapa!, gravadas dos sites no ar |
 | `assets/` | Foto de Charqueadas (Wikimedia Commons, CC BY-SA 3.0) e `credits.json` |
-
-## Como editar
-
-- **Texto de um projeto:** procure o `id` da seção em `index.html` (`painel`, `roleta`, `show`, `hub`, `pdf`, `mapa`).
-- **Novo projeto no trilho:** copie um bloco `<article class="panel ...">` dentro de `#track` e alterne o campo (`p-ink`, `p-paper`, `p-orange`) para que dois painéis vizinhos não fiquem iguais. Acrescente o nome na lista `.names`.
-- **Perfis da simulação:** objeto `perfis` em `app.js` e linhas `data-r` da tabela em `index.html`.
-- **Números:** cada `<span class="odo" data-n="...">` conta até o valor de `data-n` quando aparece.
-- **Currículo:** experiência, formação, idiomas e competências estão nas seções `#trajetoria` e `#competencias`.
 
 ## Animações
 
@@ -37,10 +27,6 @@ GSAP 3.12.5 com ScrollTrigger (em `lib/`) e Lenis 1.1.13 (CDN, só com mouse ou 
 9. Faixa de nomes (`.ribbon`): stack e projetos correndo de lado; acelera, inclina e troca de sentido com a rolagem.
 
 Com "reduzir movimento" ligado no sistema, as cenas não rodam, os vídeos ficam no pôster e a página fica estática e completa. Para testar mesmo assim, abra com `?movimento=1`.
-
-## Como ver localmente
-
-Sirva a pasta com `python -m http.server` e acesse `http://localhost:8000` (o importmap do Three.js e os vídeos precisam de um servidor).
 
 ## Publicação
 
